@@ -9,21 +9,23 @@ import { Ship } from './Ship'
 export const Gameboard = () => {
   /**
    * Array to store information about placed ships on the gameboard.
-   * @type {Object[]}
+   * @type {Object[]} - Array of ship data objects.
+   * @property {string[]} indices - Array of indices occupied by the ship.
+   * @property {Object} ship - Ship object representing the placed ship.
    * @private
    */
   const _shipsState = []
 
   /**
    * Array to store information about all received attacks.
-   * @type {String[]}
+   * @type {String[]} - Array of indices representing the coordinates of received attacks.
    * @private
    */
   const _receivedAttacks = []
 
   /**
    * Array to store information about received attacks which did not hit any ship.
-   * @type {String[]}
+   * @type {String[]} - Array of indices representing the coordinates of missed attacks.
    * @private
    */
   const _missedAttacks = []
@@ -128,10 +130,10 @@ export const Gameboard = () => {
     const endNum = parseInt(endY)
 
     if (orientation.includes('h')) {
-      // the left
+      // the left adjacent
       adjIndices.push(`${startX}${startNum - 1}`)
 
-      // the right
+      // the right adjacent
       adjIndices.push(`${endX}${endNum + 1}`)
 
       for (let i = startNum - 1; i <= endNum + 1; i++) {
@@ -141,12 +143,12 @@ export const Gameboard = () => {
         adjIndices.push(`${String.fromCharCode(startX.charCodeAt(0) + 1)}${i}`)
       }
     } else if (orientation.includes('v')) {
-      // the top
+      // the top adjacent
       adjIndices.push(
         `${String.fromCharCode(startX.charCodeAt(0) - 1)}${startNum}`
       )
 
-      // the bottom
+      // the bottom adjacent
       adjIndices.push(`${String.fromCharCode(endX.charCodeAt(0) + 1)}${endNum}`)
 
       for (let i = startX.charCodeAt(0) - 1; i <= endX.charCodeAt(0) + 1; i++) {
@@ -166,6 +168,7 @@ export const Gameboard = () => {
    * @param {number} shipLength - The length of the ship to be placed.
    * @param {string} start - The coordinates where the starting index ship will be placed, e.g., 'a1', 'j10'
    * @param {string} orientation - The orientation of the ship (e.g., 'horizontal' or 'vertical').
+   * @throws {Error} - Throws an error if the placement violates any rules.
    */
   const placeShip = (start, shipLength, orientation) => {
     const ship = Ship(shipLength)
@@ -237,7 +240,7 @@ export const Gameboard = () => {
    * @returns {boolean} - True if all ships are sunk, false otherwise.
    */
   const areAllShipsSunk = () =>
-    _shipsState.length > 0 && _shipsState.every((ship) => ship.ship.isSunk())
+    _shipsState.length > 0 && _shipsState.every((item) => item.ship.isSunk())
 
   return {
     placeShip,
