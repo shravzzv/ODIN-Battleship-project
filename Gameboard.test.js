@@ -4,11 +4,13 @@ describe('Gameboard', () => {
   let gameboard
   let placeShipSpy
   let receiveAttackSpy
+  let areAllShipsSunkSpy
 
   beforeEach(() => {
     gameboard = Gameboard()
     placeShipSpy = jest.spyOn(gameboard, 'placeShip')
     receiveAttackSpy = jest.spyOn(gameboard, 'receiveAttack')
+    areAllShipsSunkSpy = jest.spyOn(gameboard, 'areAllShipsSunk')
   })
 
   afterEach(() => {
@@ -130,6 +132,27 @@ describe('Gameboard', () => {
       expect(receiveAttackSpy).toHaveBeenCalledWith('j10')
 
       expect(() => gameboard.receiveAttack('j10')).toThrow()
+    })
+  })
+
+  describe('areAllShipsSunk', () => {
+    test('should return false when no ships are placed on the board', () => {
+      expect(gameboard.areAllShipsSunk()).toBe(false)
+      expect(areAllShipsSunkSpy).toHaveBeenCalled()
+    })
+
+    test(`should return false when all ships aren't sunk`, () => {
+      gameboard.placeShip('a1', 5, 'v')
+      expect(gameboard.areAllShipsSunk()).toBe(false)
+      expect(areAllShipsSunkSpy).toHaveBeenCalled()
+    })
+
+    test(`should return true when all ships aren sunk`, () => {
+      gameboard.placeShip('a1', 2, 'v')
+      gameboard.receiveAttack('a1')
+      gameboard.receiveAttack('b1')
+      expect(gameboard.areAllShipsSunk()).toBe(true)
+      expect(areAllShipsSunkSpy).toHaveBeenCalled()
     })
   })
 })

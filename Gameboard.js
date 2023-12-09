@@ -230,10 +230,20 @@ export const Gameboard = () => {
    */
   const getMissedAttacks = () => _missedAttacks
 
+  /**
+   * Checks if all ships on the gameboard have been sunk.
+   *
+   * @function
+   * @returns {boolean} - True if all ships are sunk, false otherwise.
+   */
+  const areAllShipsSunk = () =>
+    _shipsState.length > 0 && _shipsState.every((ship) => ship.ship.isSunk())
+
   return {
     placeShip,
     getShipsState,
     receiveAttack,
     getMissedAttacks,
+    areAllShipsSunk,
   }
 }
