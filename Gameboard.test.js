@@ -135,7 +135,7 @@ describe('Gameboard', () => {
     })
   })
 
-  describe('areAllShipsSunk', () => {
+  describe('areAllShipsSunk()', () => {
     test('should return false when no ships are placed on the board', () => {
       expect(gameboard.areAllShipsSunk()).toBe(false)
       expect(areAllShipsSunkSpy).toHaveBeenCalled()
@@ -147,7 +147,7 @@ describe('Gameboard', () => {
       expect(areAllShipsSunkSpy).toHaveBeenCalled()
     })
 
-    test(`should return true when all ships aren sunk`, () => {
+    test(`should return true when all ships are sunk`, () => {
       gameboard.placeShip('a1', 2, 'v')
       gameboard.receiveAttack('a1')
       gameboard.receiveAttack('b1')
