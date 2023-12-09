@@ -118,6 +118,12 @@ describe('Gameboard', () => {
       expect(gameboard.getMissedAttacks()).toEqual(['a1'])
     })
 
+    test('should not attack a coordinate out of bounds', () => {
+      expect(() => gameboard.receiveAttack('z9')).toThrow(
+        'Invalid index: Cannot attack an index that is out of bounds!'
+      )
+    })
+
     test('should attack a coordinate where a ship is present', () => {
       gameboard.placeShip('a1', 5, 'h')
       gameboard.receiveAttack('a1')

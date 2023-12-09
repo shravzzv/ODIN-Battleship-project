@@ -215,6 +215,12 @@ export const Gameboard = () => {
    * @throws {Error} - Throws an error if the index has already been attacked.
    */
   const receiveAttack = (index) => {
+    if (!_isIndexWithinBounds(index)) {
+      throw new Error(
+        'Invalid index: Cannot attack an index that is out of bounds!'
+      )
+    }
+
     if (_receivedAttacks.includes(index)) {
       throw new Error('Invalid index: Cannot attack an already attacked index!')
     }
