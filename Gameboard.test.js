@@ -3,14 +3,17 @@ import { Gameboard } from './Gameboard'
 describe('Gameboard', () => {
   let gameboard
   let placeShipSpy
+  let receiveAttackSpy
 
   beforeEach(() => {
     gameboard = Gameboard()
     placeShipSpy = jest.spyOn(gameboard, 'placeShip')
+    receiveAttackSpy = jest.spyOn(gameboard, 'receiveAttack')
   })
 
   afterEach(() => {
     placeShipSpy.mockClear()
+    receiveAttackSpy.mockClear()
   })
 
   describe('placeShip()', () => {
@@ -103,6 +106,30 @@ describe('Gameboard', () => {
 
       // Ensure all ships are in the gameboard state
       expect(gameboard.getShipsState()).toHaveLength(3)
+    })
+  })
+
+  describe('receiveAttack()', () => {
+    test('should attack an empty coordinate', () => {
+      gameboard.receiveAttack('a1')
+      expect(receiveAttackSpy).toHaveBeenCalledWith('a1')
+      expect(gameboard.getMissedAttacks()).toEqual(['a1'])
+    })
+
+    test('should attack a coordinate where a ship is present', () => {
+      gameboard.placeShip('a1', 5, 'h')
+      gameboard.receiveAttack('a1')
+
+      expect(placeShipSpy).toHaveBeenCalledWith('a1', 5, 'h')
+      expect(receiveAttackSpy).toHaveBeenCalledWith('a1')
+      expect(gameboard.getShipsState()[0].ship.getHits()).toBe(1)
+    })
+
+    test('should not attack an already attacked coordinate', () => {
+      gameboard.receiveAttack('j10')
+      expect(receiveAttackSpy).toHaveBeenCalledWith('j10')
+
+      expect(() => gameboard.receiveAttack('j10')).toThrow()
     })
   })
 })

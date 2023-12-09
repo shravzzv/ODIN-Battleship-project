@@ -15,6 +15,20 @@ export const Gameboard = () => {
   const _shipsState = []
 
   /**
+   * Array to store information about all received attacks.
+   * @type {String[]}
+   * @private
+   */
+  const _receivedAttacks = []
+
+  /**
+   * Array to store information about received attacks which did not hit any ship.
+   * @type {String[]}
+   * @private
+   */
+  const _missedAttacks = []
+
+  /**
    * Returns an array of all the indices that a ship occupies.
    *
    * @function
@@ -182,10 +196,44 @@ export const Gameboard = () => {
     _shipsState.push(shipData)
   }
 
+  /**
+   * Retrieves the current state of ships on the gameboard.
+   *
+   * @function
+   * @returns {Object[]} - An array containing information about placed ships on the board.
+   */
   const getShipsState = () => _shipsState
+
+  /**
+   * Processes an attack on the gameboard at the specified index.
+   *
+   * @function
+   * @param {string} index - The index representing the coordinates of the attack, e.g., 'a1', 'j10'.
+   * @throws {Error} - Throws an error if the index has already been attacked.
+   */
+  const receiveAttack = (index) => {
+    if (_receivedAttacks.includes(index)) {
+      throw new Error('Invalid index: Cannot attack an already attacked index!')
+    }
+
+    const target = _shipsState.find((ship) => ship.indices.includes(index))
+
+    target ? target.ship.hit() : _missedAttacks.push(index)
+    _receivedAttacks.push(index)
+  }
+
+  /**
+   * Retrieves the array containing indices of missed attacks on the gameboard.
+   *
+   * @function
+   * @returns {String[]} - An array of indices representing the coordinates of missed attacks.
+   */
+  const getMissedAttacks = () => _missedAttacks
 
   return {
     placeShip,
     getShipsState,
+    receiveAttack,
+    getMissedAttacks,
   }
 }
