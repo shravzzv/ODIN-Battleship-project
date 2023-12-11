@@ -44,7 +44,7 @@ export const Gameboard = () => {
     const indices = []
 
     const startX = start.at(0)
-    const startY = start.at(1)
+    const startY = start.slice(1)
     const startNum = parseInt(startY)
 
     // Generate indices based on orientation
@@ -122,7 +122,7 @@ export const Gameboard = () => {
     const end = indices.at(-1)
 
     const startX = start.at(0)
-    const startY = start.at(1)
+    const startY = start.slice(1)
     const startNum = parseInt(startY)
 
     const endX = end.at(0)
