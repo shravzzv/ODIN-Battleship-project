@@ -4,9 +4,9 @@
  * @returns {HTMLElement}
  */
 
-const Guide = () => {
+const Header = () => {
   const element = document.createElement('div')
-  element.className = 'guide'
+  element.className = 'header'
 
   const title = document.createElement('h1')
   title.className = 'title'
@@ -20,4 +20,4 @@ const Guide = () => {
   return element
 }
 
-export default Guide
+export default Header

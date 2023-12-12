@@ -62,8 +62,8 @@ h1 {
   font-family: var(--heading-font);
 }
 
-/* GUIDE COMPONENT */
-.guide {
+/* HEADER COMPONENT */
+.header {
   text-align: center;
 }
 
@@ -111,8 +111,10 @@ h1 {
     --cell-border-radius: 3px;
   }
 
-  .guide .title {
+  /* HEADER COMPONENT */
+  .header .title {
     font-size: var(--heading-font-size);
+    margin-bottom: 0;
   }
 
   .board .cell:hover {
