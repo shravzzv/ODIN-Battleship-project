@@ -1,4 +1,4 @@
-import { Ship } from './Ship'
+import { Ship } from '../src/Ship'
 
 describe('Ship Factory', () => {
   let ship

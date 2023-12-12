@@ -1,4 +1,4 @@
-import { Gameboard } from './Gameboard'
+import { Gameboard } from '../src/Gameboard'
 
 describe('Gameboard', () => {
   let gameboard
