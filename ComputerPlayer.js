@@ -50,6 +50,71 @@ export const ComputerPlayer = (enemyGameboard) => {
     return coordinatesArray.at(_getRandomIntInclusive(0, 99))
   }
 
+  /**
+   * Retrieves all the valid surrounding indices of a given index.
+   *
+   * @param {string} index - The index whose surrounding indices are wanted.
+   * @returns {string[]} - All the valid surrounding indices of the index.
+   */
+  const _getAllAdjacentIndices = (index) => {
+    const indices = []
+
+    const startX = index.at(0)
+    const startY = index.slice(1)
+    const startNum = parseInt(startY)
+
+    indices.push(
+      // left
+      `${startX}${startNum - 1}`,
+      // right
+      `${startX}${startNum + 1}`,
+      // top
+      `${String.fromCharCode(startX.charCodeAt(0) - 1)}${startY}`,
+      // bottom
+      `${String.fromCharCode(startX.charCodeAt(0) + 1)}${startY}`
+    )
+
+    return indices.filter((index) => /^[a-j]([1-9]|10)$/.test(index))
+  }
+
+  /**
+   * Retrieves an unattacked adjacent index of the last attack, allowing the computer to grope for ships.
+   *
+   * @returns {string} - The next target index.
+   * @private
+   */
+  const _getLastAttackAdjacent = () => {
+    const lastAttackIndex = getLastAttack().index
+
+    const adjacentNonAttackedIndices = _getAllAdjacentIndices(
+      lastAttackIndex
+    ).filter((index) => !_attacks.includes(index))
+
+    return adjacentNonAttackedIndices[0]
+  }
+
+  /**
+   * Returns a valid index for the next computer step.
+   *
+   * @returns {string} index - The computer's choice for the next attack.
+   *
+   */
+  const _getIndex = () => {
+    let index
+
+    if (getLastAttack()?.isHit) {
+      index = _getLastAttackAdjacent()
+    } else {
+      index = _getRandomIndex()
+    }
+
+    // this makes the computer unable to attack on an index twice
+    while (_attacks.some((attack) => attack.index === index)) {
+      index = _getRandomIndex()
+    }
+
+    return index
+  }
 
   /**
    * Makes a random attack on the human player's Gameboard.
@@ -59,25 +124,11 @@ export const ComputerPlayer = (enemyGameboard) => {
    */
   const attack = () => {
     try {
-      let index
-
       if (_attacks.length === 100) {
         throw new Error('Invalid attack: All 100 cells have been attacked!')
       }
 
-      const lastAttack = getLastAttack()
-
-      if (lastAttack && lastAttack.isHit) {
-        index = _getAdjacentIndex()
-      } else {
-        index = _getRandomIndex()
-      }
-
-      // this makes the computer unable to attack on an index twice
-      while (_attacks.some((attack) => attack.index === index)) {
-        index = _getRandomIndex()
-      }
-
+      const index = _getIndex()
       enemyGameboard.receiveAttack(index)
 
       const isHit = enemyGameboard
@@ -112,9 +163,3 @@ export const ComputerPlayer = (enemyGameboard) => {
     getLastAttack,
   }
 }
-
-// todo: Test the best cases first
-// // ? Computer should attack a random index
-// // ? Computer should not attack an already attacked index (computer is unable to generate a duplicate index)
-// // ? Computer should be able to hit a ship
-// ? if an attack hits a ship, it should be smart enough to grope for the ship by attacking the next indices

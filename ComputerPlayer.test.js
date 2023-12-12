@@ -74,16 +74,25 @@ describe('ComputerPlayer', () => {
     ).toBe(true)
   })
 
-  test('should grope for surrounding indices when a ship is hit', () => {
-    board.placeShip('a1', 3, 'v')
+  test(`should attack one of the ship's surroundings when it is hit`, () => {
+    board.placeShip('a1', 3, 'h')
+    // ship is located at 'a1', 'a2', 'a3'
 
+    // looking for the first hit
     let isHit = false
     while (!isHit) {
       computerPlayer.attack()
       isHit = computerPlayer.getLastAttack().isHit
     }
 
-    console.log(computerPlayer.getLastAttack())
+    // expect the next attack to be in the surroundings
+    computerPlayer.attack()
+
+    expect(
+      ['a1', 'a2', 'a3', 'a4', 'b1', 'b2', 'b3'].includes(
+        computerPlayer.getLastAttack().index
+      )
+    ).toBe(true)
 
     expect(attackSpy).toHaveBeenCalled()
   })
