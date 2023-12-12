@@ -24,6 +24,13 @@
   --padding-small: 0.5rem;
   --padding-medium: 1rem;
   --padding-large: 1.5rem;
+
+  /* Board variables */
+  --board-size: 100%;
+
+  /* Cell variables */
+  --cell-size: 9vmin;
+  --cell-border-radius: 3px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +47,7 @@ body {
   color: var(--primary-color);
   background-color: var(--background-color);
   padding: var(--padding-small);
+  min-height: 100vh;
 }
 
 img {
@@ -59,6 +67,30 @@ h1 {
   text-align: center;
 }
 
+/* BOARD COMPONENT */
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  gap: 2px;
+}
+
+.board .cell {
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  border: 1px solid #000;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--cell-border-radius);
+}
+
 @media only screen and (min-width: 768px) {
   /* tablet & laptop screens */
   :root {
@@ -67,6 +99,11 @@ h1 {
 
   .guide .title {
     font-size: var(--heading-font-size);
+  }
+
+  .board .cell:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
   }
 }
 
