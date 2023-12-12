@@ -3,60 +3,46 @@ import 'normalize.css'
 import './main.css'
 
 // MODULES
-import { Interface } from './Interface'
-import { Gameboard } from './Gameboard'
 import { Player } from './Player'
+import { Gameboard } from './Gameboard'
 import { ComputerPlayer } from './ComputerPlayer'
 
-Interface.initialize()
+import { Interface } from './Interface'
 
-const board1 = Gameboard()
-const board2 = Gameboard()
+// create gameboards
+const friendlyBoard = Gameboard()
+const enemyBoard = Gameboard()
 
-const player1 = Player('player1', board2)
-const player2 = ComputerPlayer(board1)
+// create players
+const friendly = Player('friendly', enemyBoard)
+const enemy = ComputerPlayer(friendlyBoard)
 
-// predermined coordinates for ships
-const shipData = [
+// Initialize the UI
+Interface.initialize(friendly, enemy, friendlyBoard, enemyBoard)
+
+// predermined coordinates for friendly ships
+const friendlyShipData = [
   ['a1', 5, 'h'],
   ['c2', 4, 'v'],
   ['j4', 4, 'h'],
   ['a8', 3, 'v'],
   ['h4', 2, 'h'],
 ]
+// predermined coordinates for enemy ships
+const enemyShipData = [
+  ['a2', 5, 'h'],
+  ['c4', 4, 'v'],
+  ['j7', 4, 'h'],
+  ['e7', 3, 'v'],
+  ['h1', 2, 'h'],
+]
 
-for (const ship of shipData) {
-  board1.placeShip(ship[0], ship[1], ship[2])
-  board2.placeShip(ship[0], ship[1], ship[2])
-}
+// place the ships on each gameboard
+friendlyShipData.forEach((ship) =>
+  friendlyBoard.placeShip(ship[0], ship[1], ship[2])
+)
+enemyShipData.forEach((ship) => enemyBoard.placeShip(ship[0], ship[1], ship[2]))
 
-Interface.placeShips(board1.getShipsState())
-
-console.log(board1.getShipsState())
-console.log(board2.getShipsState())
-
-const isGameFinished = () =>
-  board1.areAllShipsSunk() || board2.areAllShipsSunk()
-
-const coordinatesArray = []
-
-for (let i = 'a'.charCodeAt(0); i <= 'j'.charCodeAt(0); i++) {
-  for (let j = 1; j <= 10; j++) {
-    const coordinate = String.fromCharCode(i) + j
-    coordinatesArray.push(coordinate)
-  }
-}
-
-let i = 0
-while (!isGameFinished()) {
-  player1.attack(coordinatesArray[i++])
-  player2.attack()
-}
-
-console.log(player2.getAttacks())
-
-if (isGameFinished()) {
-  // find and display winner
-  const winner = board1.areAllShipsSunk() ? 'player2' : 'player1'
-  console.log(`${winner} has won!`)
-}
+// represent the ships in UI
+Interface.placeShipsOnFriendlyBoard(friendlyBoard.getShipsState())
+Interface.placeShipsOnEnemyBoard(enemyBoard.getShipsState())
