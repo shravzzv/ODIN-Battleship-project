@@ -1,14 +1,29 @@
-/* todo: Get good fonts */
+/* Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Unbounded font */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap');
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  animation: fadeIn 300ms ease;
 }
 
 :root {
+  /* Color variables */
   --primary-color: black;
   --background-color: white;
+
+  /* Font variables */
+  --main-font: 'Inter', sans-serif;
+  --heading-font: 'Unbounded', sans-serif;
+
+  /* Padding variables */
+  --padding-small: 0.5rem;
+  --padding-medium: 1rem;
+  --padding-large: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,8 +33,41 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
+/* STYLES FOR DEFAULT ELEMENTS */
+
+body {
+  font-family: var(--main-font);
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  padding: var(--padding-small);
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  font-family: var(--heading-font);
+}
+
+/* GUIDE COMPONENT */
+.guide {
+  text-align: center;
+}
+
+@media only screen and (min-width: 768px) {
   /* tablet & laptop screens */
+  :root {
+    --heading-font-size: 4rem;
+  }
+
+  .guide .title {
+    font-size: var(--heading-font-size);
+  }
 }
 
 /* KEYFRAMES */
