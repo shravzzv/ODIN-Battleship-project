@@ -1,5 +1,5 @@
-import { ComputerPlayer } from './computerPlayer'
-import { Gameboard } from './Gameboard'
+import { ComputerPlayer } from '../src/ComputerPlayer'
+import { Gameboard } from '../src/Gameboard'
 
 describe('ComputerPlayer', () => {
   let computerPlayer

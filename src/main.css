@@ -1,0 +1,211 @@
+/* Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Unbounded font */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  animation: fadeIn 300ms ease;
+}
+
+:root {
+  /* Color variables */
+  --primary-color: black;
+  --background-color: white;
+
+  /* Font variables */
+  --main-font: 'Inter', sans-serif;
+  --heading-font: 'Unbounded', sans-serif;
+
+  /* Padding variables */
+  --padding-small: 0.5rem;
+  --padding-medium: 1rem;
+  --padding-large: 1.5rem;
+
+  /* Board variables */
+  --board-size: 100%;
+
+  /* Cell variables */
+  --cell-size: 9vmin;
+  --cell-border-radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: white;
+    --background-color: #1c1c1c;
+  }
+}
+
+/* STYLES FOR DEFAULT ELEMENTS */
+
+body {
+  font-family: var(--main-font);
+  color: var(--primary-color);
+  background-color: var(--background-color);
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  font-family: var(--heading-font);
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* HEADER COMPONENT */
+.header {
+  text-align: center;
+}
+
+.subTitle {
+  padding: var(--padding-small);
+}
+
+/* BOARD COMPONENT */
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  gap: 2px;
+}
+
+.board .cell {
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  border: 1px solid #000;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--cell-border-radius);
+}
+
+.cell.attacked {
+  box-shadow: rgb(43, 255, 0) 0px 30px 60px -12px inset,
+    rgb(94, 255, 0) 0px 18px 36px -18px inset;
+}
+
+.cell.ship.attacked {
+  box-shadow: rgba(255, 0, 34, 1) 0px 30px 60px -12px inset,
+    rgba(253, 0, 0, 1) 0px 18px 36px -18px inset;
+}
+
+/* ARENA COMPONENT */
+.arena {
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin: 2em auto;
+  padding: var(--padding-large);
+}
+
+.instructions > div {
+  text-align: left;
+}
+
+.gitHubLink {
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  gap: 1rem;
+}
+
+.gitHubImage {
+  height: 50px;
+}
+
+/* TABLET & DESKTOP DISPLAYS */
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --heading-font-size: 4rem;
+
+    /* Cell variables */
+    --cell-size: 6vmin;
+    --cell-border-radius: 3px;
+  }
+
+  /* HEADER COMPONENT */
+  .header .title {
+    font-size: var(--heading-font-size);
+  }
+
+  /* BOARD COMPONENT */
+
+  /* .board.friendly {
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+      rgba(46, 153, 78, 0.5) 0px 50px 100px -20px,
+      rgba(72, 165, 95, 0.3) 0px 30px 60px -30px;
+    background-color: rgba(72, 165, 95, 0.3);
+  }
+
+  .board.enemy {
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+      rgba(156, 45, 54, 0.5) 0px 50px 100px -20px,
+      rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
+    background-color: rgba(202, 114, 114, 0.3);
+  } */
+
+  .board.enemy .cell:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+  }
+
+  .board.friendly .cell {
+    cursor: not-allowed;
+  }
+
+  /* ARENA COMPONENT */
+  .arena {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  /* FOOTER COMPONENT */
+  .instructions {
+    display: flex;
+    padding: var(--padding-large);
+    line-height: 1.25;
+  }
+
+  .instructions > div {
+    flex: 1;
+    padding: var(--padding-large);
+  }
+}
+
+/* KEYFRAMES */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

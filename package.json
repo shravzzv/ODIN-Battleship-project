@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test watch": "jest --watch"
+    "test": "jest --coverage",
+    "test watch": "jest --watch --coverage",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "Sai Shravan <shravzzv@outlook.com>",
@@ -13,6 +15,13 @@
   "devDependencies": {
     "@babel/preset-env": "^7.23.5",
     "babel-jest": "^29.7.0",
-    "jest": "^29.7.0"
+    "css-loader": "^6.8.1",
+    "jest": "^29.7.0",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
   }
 }
