@@ -14,11 +14,8 @@ const friendlyBoard = Gameboard()
 const enemyBoard = Gameboard()
 
 // create players
-const friendly = Player('friendly', enemyBoard)
-const enemy = ComputerPlayer(friendlyBoard)
-
-// Initialize the UI
-Interface.initialize(friendly, enemy, friendlyBoard, enemyBoard)
+const friendlyPlayer = Player('friendly', enemyBoard)
+const enemyPlayer = ComputerPlayer(friendlyBoard)
 
 // predermined coordinates for friendly ships
 const friendlyShipData = [
@@ -43,6 +40,9 @@ friendlyShipData.forEach((ship) =>
 )
 enemyShipData.forEach((ship) => enemyBoard.placeShip(ship[0], ship[1], ship[2]))
 
-// represent the ships in UI
-Interface.placeShipsOnFriendlyBoard(friendlyBoard.getShipsState())
-Interface.placeShipsOnEnemyBoard(enemyBoard.getShipsState())
+// Initialize the UI
+Interface.initialize()
+
+export { friendlyPlayer, enemyPlayer, friendlyBoard, enemyBoard }
+
+// todo: Add restart game feature

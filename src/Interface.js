@@ -1,6 +1,12 @@
 import Header from './components/Header'
 import Arena from './components/Arena'
 import Footer from './components/Footer'
+import {
+  friendlyPlayer,
+  friendlyBoard,
+  enemyPlayer,
+  enemyBoard,
+} from './Gameloop'
 
 /**
  * Module for DOM interaction.
@@ -18,37 +24,57 @@ export const Interface = (() => {
   /**
    * Initializes the DOM interface by appending necessary components and adding default event listeners.
    */
-  const initialize = (
-    friendlyPlayer,
-    enemyPlayer,
-    friendlyBoard,
-    enemyBoard
-  ) => {
+  const initialize = () => {
     // Append components to the root element
     _root.appendChild(Header())
     _root.appendChild(Arena())
     _root.appendChild(Footer())
 
+    // represent ships in the UI
+    _displayShipsOnFriendlyBoard(friendlyBoard.getShipsState())
+    _displayShipsOnEnemyBoard(enemyBoard.getShipsState())
+
     // Add default event listeners to enemy board cells
     document
       .querySelectorAll('.board.enemy .cell')
-      .forEach((cell) =>
-        cell.addEventListener('click', (e) => _handleCellClick(e, enemyPlayer))
-      )
+      .forEach((cell) => cell.addEventListener('click', _handleCellClick))
   }
 
   /**
    * Handles the click event on an enemy board cell.
    *
-   * @param {Event} e - The click event.
+   * @param {Event} e - The click event object.
    * @private
    */
-  const _handleCellClick = (e, enemyPlayer) => {
+  const _handleCellClick = (e) => {
+    // prevent attacking an already attacked index
+    if (e.target.classList.contains('attacked')) {
+      return
+    }
+
+    // Extract the data-index attribute to determine the cell index
     const index = e.target.attributes['data-index'].value
+
+    // Friendly player performs an attack on the specified index
+    friendlyPlayer.attack(index)
+
+    // Marks the clicked enemy cell as attacked in the UI
     _markEnemyCellAsAttacked(index)
 
+    // Enemy player performs an attack
     enemyPlayer.attack()
-    _markFriendlyCellAsAttacked(enemyPlayer.getLastAttack().index)
+
+    // Marks the friendly cell as attacked in the UI after after a short delay
+    setTimeout(() => {
+      _markFriendlyCellAsAttacked(enemyPlayer.getLastAttack().index)
+    }, 300)
+
+    // Checks and displays the winner based on the game status and remove the event listener if there is a winner
+    if (_checkWinner(friendlyBoard, enemyBoard)) {
+      document
+        .querySelectorAll('.board.enemy .cell')
+        .forEach((cell) => cell.removeEventListener('click', _handleCellClick))
+    }
   }
 
   /**
@@ -81,7 +107,7 @@ export const Interface = (() => {
    *
    * @param {Object[]} shipsState - The shipState object from the friendly's gameboard.
    */
-  const placeShipsOnFriendlyBoard = (shipsState) =>
+  const _displayShipsOnFriendlyBoard = (shipsState) =>
     shipsState.forEach((item) => {
       let { indices } = item
       indices.forEach((index) => {
@@ -98,7 +124,7 @@ export const Interface = (() => {
    *
    * @param {Object[]} shipsState - The shipState object from the enemy's gameboard.
    */
-  const placeShipsOnEnemyBoard = (shipsState) =>
+  const _displayShipsOnEnemyBoard = (shipsState) =>
     shipsState.forEach((item) => {
       let { indices } = item
       indices.forEach((index) => {
@@ -106,13 +132,30 @@ export const Interface = (() => {
           `.board.enemy .cell[data-index=${index}]`
         )
         cell.classList.add('ship')
-        // cell.textContent = '🛳️'
+        cell.textContent = '🛳️'
       })
     })
 
+  /**
+   * Displays the winner based on the game status.
+   *
+   * @param {Object} friendlyBoard - The friendly player's gameboard.
+   * @param {Object} enemyBoard - The enemy player's gameboard.
+   * @returns {boolean} - True if there is a winner, otherwise false.
+   */
+  const _checkWinner = (friendlyBoard, enemyBoard) => {
+    if (friendlyBoard.areAllShipsSunk() || enemyBoard.areAllShipsSunk()) {
+      setTimeout(() => {
+        friendlyBoard.areAllShipsSunk()
+          ? alert('OOPS! The enemy sunk all your ships!')
+          : alert('HURRAY! You sunk all the enemy ships! Bravo!')
+      }, 400)
+      return true
+    }
+    return false
+  }
+
   return {
     initialize,
-    placeShipsOnEnemyBoard,
-    placeShipsOnFriendlyBoard,
   }
 })()
