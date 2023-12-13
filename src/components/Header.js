@@ -13,9 +13,10 @@ const Header = () => {
   title.textContent = 'Battleship'
   element.appendChild(title)
 
-  const text = document.createElement('p')
-  text.textContent = `Sink all of your enemy's ships before they sink yours.`
-  element.appendChild(text)
+  const subTitle = document.createElement('p')
+  subTitle.textContent = `Sink all of your enemy's ships before they sink yours.`
+  subTitle.className = 'subTitle'
+  // element.appendChild(subTitle)
 
   return element
 }
