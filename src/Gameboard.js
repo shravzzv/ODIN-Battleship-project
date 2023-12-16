@@ -91,8 +91,8 @@ export const Gameboard = () => {
    * @private
    */
   const _occupiesEmptyIndices = (indices) =>
-    _shipsState.every((ship) =>
-      indices.every((index) => !ship.indices.includes(index))
+    _shipsState.every((item) =>
+      indices.every((index) => !item.indices.includes(index))
     )
 
   /**
@@ -225,7 +225,7 @@ export const Gameboard = () => {
       throw new Error('Invalid index: Cannot attack an already attacked index!')
     }
 
-    const target = _shipsState.find((ship) => ship.indices.includes(index))
+    const target = _shipsState.find((item) => item.indices.includes(index))
 
     target ? target.ship.hit() : _missedAttacks.push(index)
     _receivedAttacks.push(index)
