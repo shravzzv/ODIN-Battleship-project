@@ -130,10 +130,44 @@ ul {
   align-items: center;
   flex-direction: column-reverse;
   gap: 1rem;
+  color: var(--primary-color);
 }
 
 .gitHubImage {
   height: 50px;
+}
+
+/* START SCREEN */
+.startScreen {
+  text-align: center;
+  padding: var(--padding-large);
+}
+
+.startScreen > form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.userNameInput {
+  padding: var(--padding-small);
+}
+
+.startGameBtn {
+  padding: var(--padding-small);
+  cursor: pointer;
+}
+
+/* END SCREEN */
+.endScreen {
+  text-align: center;
+  padding: var(--padding-large);
+}
+
+.restart {
+  padding: var(--padding-small);
+  cursor: pointer;
 }
 
 /* TABLET & DESKTOP DISPLAYS */

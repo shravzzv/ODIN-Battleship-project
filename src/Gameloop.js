@@ -16,18 +16,6 @@ const isGameFinished = (friendlyBoard, enemyBoard) =>
   friendlyBoard.areAllShipsSunk() || enemyBoard.areAllShipsSunk()
 
 /**
- * Displays a winner message based on the status of the friendly player's gameboard.
- *
- * @param {Object} friendlyBoard - The friendly player's gameboard.
- */
-const displayWinner = (friendlyBoard) =>
-  alert(
-    friendlyBoard.areAllShipsSunk()
-      ? 'OOPS! The enemy sunk all your ships!'
-      : 'HURRAY! You sunk all the enemy ships! Bravo!'
-  )
-
-/**
  * Executes the main game loop for the Battleship game.
  */
 const gameLoop = () => {
@@ -39,6 +27,7 @@ const gameLoop = () => {
   const friendlyPlayer = Player('John', enemyBoard)
   const enemyPlayer = ComputerPlayer(friendlyBoard)
 
+  // todo: Instead of this being predermined, get it data from the user.
   // predermined coordinates for friendly ships
   const friendlyShipData = [
     ['a1', 5, 'h'],
@@ -75,7 +64,6 @@ const gameLoop = () => {
    */
   const attackEnemy = (e) => {
     const index = e.target.attributes['data-index'].value
-    // prevent attacking an already attacked index
     if (e.target.classList.contains('attacked')) return
 
     friendlyPlayer.attack(index)
@@ -84,14 +72,17 @@ const gameLoop = () => {
     setTimeout(() => {
       enemyPlayer.attack()
       Interface.markFriendlyCellAsAttacked(enemyPlayer.getLastAttack().index)
-    }, 300)
 
-    if (isGameFinished(friendlyBoard, enemyBoard)) {
-      displayWinner(friendlyBoard)
-      document
-        .querySelectorAll('.board.enemy .cell')
-        .forEach((cell) => cell.removeEventListener('click', attackEnemy))
-    }
+      if (isGameFinished(friendlyBoard, enemyBoard)) {
+        document
+          .querySelectorAll('.board.enemy .cell')
+          .forEach((cell) => cell.removeEventListener('click', attackEnemy))
+
+        Interface.displayEndScreen(enemyBoard.areAllShipsSunk())
+
+        document.querySelector('.restart').addEventListener('click', gameLoop)
+      }
+    }, 300)
   }
 
   document
@@ -99,4 +90,13 @@ const gameLoop = () => {
     .forEach((cell) => cell.addEventListener('click', attackEnemy))
 }
 
-gameLoop()
+Interface.welcomeUser()
+document.querySelector('.startForm').addEventListener('submit', gameLoop)
+
+/**
+ * Bridge:
+ * Complete start screen
+ * Complete end screen
+ * Make a ships placing component
+ * Tie the game workflow together
+ */

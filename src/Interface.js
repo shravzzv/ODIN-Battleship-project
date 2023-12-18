@@ -1,4 +1,10 @@
+import Header from './components/Header'
+import Main from './components/main'
+import Footer from './components/Footer'
+
+import StartScreen from './components/StartScreen'
 import Arena from './components/Arena'
+import EndScreen from './components/Endscreen'
 
 /**
  * Module for DOM interaction.
@@ -13,12 +19,21 @@ export const Interface = (() => {
    */
   const _root = document.querySelector('#root')
 
+  const welcomeUser = () => {
+    _root.appendChild(Header())
+    _root.appendChild(Main())
+    _root.appendChild(Footer())
+
+    document.querySelector('.main').appendChild(StartScreen())
+  }
+
   /**
    * Display both the player’s boards and renders them using information from their respective boards.
    */
   const renderBoards = (friendlyBoard, enemyBoard) => {
-    _root.appendChild(Arena())
-
+    const mainEl = document.querySelector('.main')
+    mainEl.innerHTML = ``
+    mainEl.appendChild(Arena())
     // represent ships in the UI
     _displayShipsOnFriendlyBoard(friendlyBoard.getShipsState())
     _displayShipsOnEnemyBoard(enemyBoard.getShipsState())
@@ -82,9 +97,17 @@ export const Interface = (() => {
     cell.classList.add('attacked')
   }
 
+  const displayEndScreen = (isWon) => {
+    const mainEl = document.querySelector('.main')
+    mainEl.innerHTML = ``
+    mainEl.appendChild(EndScreen(isWon))
+  }
+
   return {
     renderBoards,
     markEnemyCellAsAttacked,
     markFriendlyCellAsAttacked,
+    displayEndScreen,
+    welcomeUser,
   }
 })()
