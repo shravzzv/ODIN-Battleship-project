@@ -95,8 +95,6 @@ document.querySelector('.startForm').addEventListener('submit', gameLoop)
 
 /**
  * Bridge:
- * Complete start screen
- * Complete end screen
- * Make a ships placing component
+ * Make a ships placing component (take inspiration from others submissions)
  * Tie the game workflow together
  */

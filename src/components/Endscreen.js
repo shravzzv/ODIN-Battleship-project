@@ -4,7 +4,7 @@ const EndScreen = (isWon) => {
 
   const winText = document.createElement('h2')
   winText.className = 'winText'
-  winText.textContent = 'Congratultions! You won! 🎉'
+  winText.textContent = 'Congratulations! You won! 🎉 Wanna win again?'
 
   const lossText = document.createElement('h2')
   lossText.className = 'lossText'

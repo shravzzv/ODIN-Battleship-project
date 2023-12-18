@@ -25,10 +25,18 @@
   --padding-medium: 1rem;
   --padding-large: 1.5rem;
 
-  /* Board variables */
+  /* Buttons */
+  --btn-padding: 0.5rem 1rem;
+  --btn-border-radius: 15px;
+
+  /* Inputs */
+  --input-padding: 0.5rem 1rem;
+  --input-border-radius: 15px;
+
+  /* Board component */
   --board-size: 100%;
 
-  /* Cell variables */
+  /* Cell component */
   --cell-size: 9vmin;
   --cell-border-radius: 3px;
 }
@@ -64,6 +72,28 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+button {
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  text-align: center;
+  border: none;
+}
+
+input {
+  padding: var(--input-padding);
+  border-radius: var(--input-border-radius);
+  border: none;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  outline: none;
+}
+
+input[type='submit'] {
+  cursor: pointer;
+  box-shadow: none;
 }
 
 /* HEADER COMPONENT */
@@ -117,7 +147,7 @@ ul {
 /* FOOTER */
 .footer {
   text-align: center;
-  margin: 2em auto;
+  margin: 0 auto 2em auto;
   padding: var(--padding-large);
 }
 
@@ -147,27 +177,14 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   gap: 1em;
-}
-
-.userNameInput {
-  padding: var(--padding-small);
-}
-
-.startGameBtn {
-  padding: var(--padding-small);
-  cursor: pointer;
 }
 
 /* END SCREEN */
 .endScreen {
   text-align: center;
   padding: var(--padding-large);
-}
-
-.restart {
-  padding: var(--padding-small);
-  cursor: pointer;
 }
 
 /* TABLET & DESKTOP DISPLAYS */
@@ -229,6 +246,8 @@ ul {
     flex: 1;
     padding: var(--padding-large);
   }
+
+  /* START SCREEN */
 }
 
 /* KEYFRAMES */

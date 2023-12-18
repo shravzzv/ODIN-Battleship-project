@@ -10,6 +10,7 @@ const StartScreen = () => {
   userNameInput.type = 'text'
   userNameInput.placeholder = 'Enter your name'
   userNameInput.setAttribute('required', 'true')
+  userNameInput.setAttribute('autoFocus', 'true')
   formEl.appendChild(userNameInput)
 
   const startBtn = document.createElement('input')
