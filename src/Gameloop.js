@@ -75,6 +75,9 @@ const gameLoop = () => {
    */
   const attackEnemy = (e) => {
     const index = e.target.attributes['data-index'].value
+    // prevent attacking an already attacked index
+    if (e.target.classList.contains('attacked')) return
+
     friendlyPlayer.attack(index)
     Interface.markEnemyCellAsAttacked(index)
 
