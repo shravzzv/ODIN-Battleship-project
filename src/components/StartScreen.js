@@ -8,6 +8,7 @@ const StartScreen = () => {
   const userNameInput = document.createElement('input')
   userNameInput.className = 'userNameInput'
   userNameInput.type = 'text'
+  userNameInput.name = 'playerName'
   userNameInput.placeholder = 'Enter your name'
   userNameInput.setAttribute('required', 'true')
   userNameInput.setAttribute('autoFocus', 'true')

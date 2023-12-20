@@ -8,7 +8,7 @@ import { Interface } from './Interface'
 Interface.showHomeScreen()
 let playerName
 
-// todo: Instead of this being predermined, get it data from the user.
+// todo: Instead of this being predermined, get it from the user.
 // predermined coordinates for ships on friendly waters
 const friendlyShipData = [
   ['a1', 5, 'h'],
@@ -97,7 +97,7 @@ const gameLoop = () => {
 // Start a new game after user sumbits their name
 document.querySelector('.startForm').addEventListener('submit', (e) => {
   e.preventDefault()
-  playerName = e.target.elements[0].value.trim()
+  playerName = e.target.elements.playerName.value.trim()
   if (!playerName) return
   gameLoop()
 })
