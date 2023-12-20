@@ -8,6 +8,25 @@ import { Interface } from './Interface'
 Interface.showHomeScreen()
 let playerName
 
+// todo: Instead of this being predermined, get it data from the user.
+// predermined coordinates for ships on friendly waters
+const friendlyShipData = [
+  ['a1', 5, 'h'],
+  ['c2', 4, 'v'],
+  ['j4', 4, 'h'],
+  ['a8', 3, 'v'],
+  ['h4', 2, 'h'],
+]
+
+// predermined coordinates for ships on enemy waters
+const enemyShipData = [
+  ['a2', 5, 'h'],
+  ['c4', 4, 'v'],
+  ['j7', 4, 'h'],
+  ['e7', 3, 'v'],
+  ['h1', 2, 'h'],
+]
+
 /**
  * Checks if the game is finished based on the status of both friendly and enemy gameboards.
  *
@@ -30,29 +49,11 @@ const gameLoop = () => {
   const friendlyPlayer = Player(playerName, enemyBoard)
   const enemyPlayer = ComputerPlayer(friendlyBoard)
 
-  // todo: Instead of this being predermined, get it data from the user.
-  // predermined coordinates for friendly ships
-  const friendlyShipData = [
-    ['a1', 5, 'h'],
-    ['c2', 4, 'v'],
-    ['j4', 4, 'h'],
-    ['a8', 3, 'v'],
-    ['h4', 2, 'h'],
-  ]
-  // predermined coordinates for enemy ships
-  const enemyShipData = [
-    ['a2', 5, 'h'],
-    ['c4', 4, 'v'],
-    ['j7', 4, 'h'],
-    ['e7', 3, 'v'],
-    ['h1', 2, 'h'],
-  ]
-
-  // place the ships on friendlyBoard's predetermined coordinates
+  // place the ships on friendlyBoard
   friendlyShipData.forEach((ship) =>
     friendlyBoard.placeShip(ship[0], ship[1], ship[2])
   )
-  // place the ships on enemyboard's predetermined coordinates
+  // place the ships on enemyboard
   enemyShipData.forEach((ship) =>
     enemyBoard.placeShip(ship[0], ship[1], ship[2])
   )
@@ -81,7 +82,7 @@ const gameLoop = () => {
           .querySelectorAll('.board.enemy .cell')
           .forEach((cell) => cell.removeEventListener('click', attackEnemy))
 
-        Interface.displayEndScreen(enemyBoard.areAllShipsSunk(), playerName)
+        Interface.showEndScreen(enemyBoard.areAllShipsSunk(), playerName)
 
         document.querySelector('.restart').addEventListener('click', gameLoop)
       }
@@ -93,7 +94,7 @@ const gameLoop = () => {
     .forEach((cell) => cell.addEventListener('click', attackEnemy))
 }
 
-// Start a new game after user inputs their name and presses enter.
+// Start a new game after user sumbits their name
 document.querySelector('.startForm').addEventListener('submit', (e) => {
   e.preventDefault()
   playerName = e.target.elements[0].value.trim()

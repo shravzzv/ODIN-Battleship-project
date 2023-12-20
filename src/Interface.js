@@ -104,7 +104,7 @@ export const Interface = (() => {
     cell.classList.add('attacked')
   }
 
-  const displayEndScreen = (isWon, name) => {
+  const showEndScreen = (isWon, name) => {
     const mainEl = document.querySelector('.main')
     mainEl.innerHTML = ``
     mainEl.appendChild(EndScreen(isWon, name))
@@ -114,7 +114,7 @@ export const Interface = (() => {
     renderBoards,
     markEnemyCellAsAttacked,
     markFriendlyCellAsAttacked,
-    displayEndScreen,
+    showEndScreen,
     showHomeScreen,
   }
 })()
