@@ -1,10 +1,9 @@
 import Header from './components/Header'
 import Main from './components/Main'
 import Footer from './components/Footer'
-
 import StartScreen from './components/StartScreen'
 import Arena from './components/Arena'
-import EndScreen from './components/Endscreen'
+import EndScreen from './components/EndScreen'
 
 /**
  * Module for DOM interaction.
