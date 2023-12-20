@@ -19,7 +19,14 @@ export const Interface = (() => {
    */
   const _root = document.querySelector('#root')
 
-  const welcomeUser = () => {
+  /**
+   * Displays the home screen of the game.
+   * This function initializes the game by appending the header, main content, and footer to the root element.
+   * It further appends the start screen to the main content section.
+   * @function
+   * @returns {void}
+   */
+  const showHomeScreen = () => {
     _root.appendChild(Header())
     _root.appendChild(Main())
     _root.appendChild(Footer())
@@ -97,10 +104,10 @@ export const Interface = (() => {
     cell.classList.add('attacked')
   }
 
-  const displayEndScreen = (isWon) => {
+  const displayEndScreen = (isWon, name) => {
     const mainEl = document.querySelector('.main')
     mainEl.innerHTML = ``
-    mainEl.appendChild(EndScreen(isWon))
+    mainEl.appendChild(EndScreen(isWon, name))
   }
 
   return {
@@ -108,6 +115,6 @@ export const Interface = (() => {
     markEnemyCellAsAttacked,
     markFriendlyCellAsAttacked,
     displayEndScreen,
-    welcomeUser,
+    showHomeScreen,
   }
 })()

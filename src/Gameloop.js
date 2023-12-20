@@ -5,6 +5,9 @@ import { Gameboard } from './Gameboard'
 import { ComputerPlayer } from './ComputerPlayer'
 import { Interface } from './Interface'
 
+Interface.showHomeScreen()
+let playerName
+
 /**
  * Checks if the game is finished based on the status of both friendly and enemy gameboards.
  *
@@ -24,7 +27,7 @@ const gameLoop = () => {
   const enemyBoard = Gameboard()
 
   // create players
-  const friendlyPlayer = Player('John', enemyBoard)
+  const friendlyPlayer = Player(playerName, enemyBoard)
   const enemyPlayer = ComputerPlayer(friendlyBoard)
 
   // todo: Instead of this being predermined, get it data from the user.
@@ -78,7 +81,7 @@ const gameLoop = () => {
           .querySelectorAll('.board.enemy .cell')
           .forEach((cell) => cell.removeEventListener('click', attackEnemy))
 
-        Interface.displayEndScreen(enemyBoard.areAllShipsSunk())
+        Interface.displayEndScreen(enemyBoard.areAllShipsSunk(), playerName)
 
         document.querySelector('.restart').addEventListener('click', gameLoop)
       }
@@ -90,8 +93,13 @@ const gameLoop = () => {
     .forEach((cell) => cell.addEventListener('click', attackEnemy))
 }
 
-Interface.welcomeUser()
-document.querySelector('.startForm').addEventListener('submit', gameLoop)
+// Start a new game after user inputs their name and presses enter.
+document.querySelector('.startForm').addEventListener('submit', (e) => {
+  e.preventDefault()
+  playerName = e.target.elements[0].value.trim()
+  if (!playerName) return
+  gameLoop()
+})
 
 /**
  * Bridge:
