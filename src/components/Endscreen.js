@@ -1,3 +1,10 @@
+/**
+ * Creates an end screen element for the Battleship game.
+ * @function
+ * @param {boolean} isWon - A flag indicating whether the player has won the game.
+ * @param {string} name - The name of the player.
+ * @returns {HTMLElement} - The end screen element containing congratulatory or loss message and a restart button.
+ */
 const EndScreen = (isWon, name) => {
   const element = document.createElement('div')
   element.className = 'endScreen'
