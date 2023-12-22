@@ -201,6 +201,10 @@ input[type='submit'] {
   gap: 1em;
 }
 
+.shipsPlacingScreen .heading {
+  margin: 0;
+}
+
 .shipsPlacingScreen .cell:hover {
   box-shadow: rgb(43, 255, 0) 0px 30px 60px -12px inset,
     rgb(94, 255, 0) 0px 18px 36px -18px inset;
@@ -225,6 +229,7 @@ input[type='submit'] {
   /* HEADER COMPONENT */
   .header .title {
     font-size: var(--heading-font-size);
+    margin-bottom: 0.25em;
   }
 
   /* BOARD COMPONENT */

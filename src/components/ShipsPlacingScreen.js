@@ -11,6 +11,7 @@ const ShipsPlacingScreen = () => {
 
   const heading = document.createElement('h2')
   heading.textContent = 'Place your ships'
+  heading.className = 'heading'
   element.appendChild(heading)
 
   element.appendChild(Board())
