@@ -192,6 +192,20 @@ input[type='submit'] {
   gap: 1em;
 }
 
+/* SHIPS PLACING SCREEN */
+.shipsPlacingScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.shipsPlacingScreen .cell:hover {
+  box-shadow: rgb(43, 255, 0) 0px 30px 60px -12px inset,
+    rgb(94, 255, 0) 0px 18px 36px -18px inset;
+}
+
 /* TABLET & DESKTOP DISPLAYS */
 
 @media only screen and (min-width: 768px) {

@@ -117,6 +117,15 @@ export const Interface = (() => {
     main.appendChild(ShipsPlacingScreen())
   }
 
+  const showPlacedShips = (shipsState) =>
+    shipsState.forEach((item) => {
+      let { indices } = item
+      indices.forEach((index) => {
+        let cell = document.querySelector(`.cell[data-index=${index}]`)
+        cell.textContent = '🛳️'
+      })
+    })
+
   return {
     renderBoards,
     markEnemyCellAsAttacked,
@@ -124,5 +133,6 @@ export const Interface = (() => {
     showEndScreen,
     showHomeScreen,
     showShipsPlacingScreen,
+    showPlacedShips,
   }
 })()

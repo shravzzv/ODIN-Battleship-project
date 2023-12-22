@@ -8,9 +8,8 @@ import { Interface } from './Interface'
 Interface.showHomeScreen()
 let playerName
 
-// todo: Instead of this being predermined, get it from the user.
 // predermined coordinates for ships on friendly waters
-const friendlyShipData = [
+let friendlyShipData = [
   ['a1', 5, 'h'],
   ['c2', 4, 'v'],
   ['j4', 4, 'h'],
@@ -90,9 +89,7 @@ const gameLoop = () => {
           .querySelector('#restartWithNewShips')
           .addEventListener('click', (e) => {
             Interface.showShipsPlacingScreen()
-            document
-              .querySelector('#continue')
-              .addEventListener('click', gameLoop)
+            enableShipsPlacementScreenEventListeners()
           })
       }
     }, 300)
@@ -110,8 +107,36 @@ document.querySelector('.startForm').addEventListener('submit', (e) => {
   if (!playerName) return
 
   Interface.showShipsPlacingScreen()
-  document.querySelector('#continue').addEventListener('click', gameLoop)
+  enableShipsPlacementScreenEventListeners()
 })
+
+/**
+ * Places event listeners on the ships placement screen.
+ */
+const enableShipsPlacementScreenEventListeners = () => {
+  const shipsData = []
+  const dummyBoard = Gameboard()
+
+  document.querySelectorAll('.cell').forEach((cell) =>
+    cell.addEventListener('click', (e) => {
+      const index = e.target.attributes['data-index'].value
+
+      shipsData.push([index, 5, 'h'])
+
+      let [start, length, orientation] = shipsData.at(-1)
+
+      dummyBoard.placeShip(start, length, orientation)
+      Interface.showPlacedShips(dummyBoard.getShipsState())
+    })
+  )
+
+  // todo: Implement ships placing logic
+
+  document.querySelector('#continue').addEventListener('click', (e) => {
+    friendlyShipData = shipsData
+    gameLoop()
+  })
+}
 
 /**
  * Bridge:
