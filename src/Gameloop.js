@@ -84,7 +84,16 @@ const gameLoop = () => {
 
         Interface.showEndScreen(enemyBoard.areAllShipsSunk(), playerName)
 
-        document.querySelector('.restart').addEventListener('click', gameLoop)
+        document.querySelector('#restart').addEventListener('click', gameLoop)
+
+        document
+          .querySelector('#restartWithNewShips')
+          .addEventListener('click', (e) => {
+            Interface.showShipsPlacingScreen()
+            document
+              .querySelector('#continue')
+              .addEventListener('click', gameLoop)
+          })
       }
     }, 300)
   }
@@ -94,12 +103,14 @@ const gameLoop = () => {
     .forEach((cell) => cell.addEventListener('click', attackEnemy))
 }
 
-// Start a new game after user sumbits their name
+// Start a new game after user sumbits their name & places ships
 document.querySelector('.startForm').addEventListener('submit', (e) => {
   e.preventDefault()
   playerName = e.target.elements.playerName.value.trim()
   if (!playerName) return
-  gameLoop()
+
+  Interface.showShipsPlacingScreen()
+  document.querySelector('#continue').addEventListener('click', gameLoop)
 })
 
 /**

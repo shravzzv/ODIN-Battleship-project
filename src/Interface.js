@@ -4,6 +4,7 @@ import Footer from './components/Footer'
 import StartScreen from './components/StartScreen'
 import Arena from './components/Arena'
 import EndScreen from './components/EndScreen'
+import ShipsPlacingScreen from './components/ShipsPlacingScreen'
 
 /**
  * Module for DOM interaction.
@@ -109,11 +110,19 @@ export const Interface = (() => {
     mainEl.appendChild(EndScreen(isWon, name))
   }
 
+  const showShipsPlacingScreen = () => {
+    const main = document.querySelector('.main')
+
+    main.innerHTML = ''
+    main.appendChild(ShipsPlacingScreen())
+  }
+
   return {
     renderBoards,
     markEnemyCellAsAttacked,
     markFriendlyCellAsAttacked,
     showEndScreen,
     showHomeScreen,
+    showShipsPlacingScreen,
   }
 })()

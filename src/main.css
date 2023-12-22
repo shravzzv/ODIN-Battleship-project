@@ -185,6 +185,11 @@ input[type='submit'] {
 .endScreen {
   text-align: center;
   padding: var(--padding-large);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
 }
 
 /* TABLET & DESKTOP DISPLAYS */

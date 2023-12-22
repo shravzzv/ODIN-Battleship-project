@@ -20,9 +20,16 @@ const EndScreen = (isWon, name) => {
   isWon ? element.appendChild(winText) : element.appendChild(lossText)
 
   const restartBtn = document.createElement('button')
+  restartBtn.id = 'restart'
   restartBtn.className = 'restart'
   restartBtn.textContent = 'Restart'
   element.appendChild(restartBtn)
+
+  const restartBtnWithNewShips = document.createElement('button')
+  restartBtnWithNewShips.id = 'restartWithNewShips'
+  restartBtnWithNewShips.className = 'restart'
+  restartBtnWithNewShips.textContent = 'Change ships placement and restart'
+  element.appendChild(restartBtnWithNewShips)
 
   return element
 }
