@@ -8,24 +8,6 @@ import { Interface } from './Interface'
 Interface.showHomeScreen()
 let playerName
 
-// predermined coordinates for ships on friendly waters
-let friendlyShipData = [
-  ['a1', 5, 'h'],
-  ['c2', 4, 'v'],
-  ['j4', 4, 'h'],
-  ['a8', 3, 'v'],
-  ['h4', 2, 'h'],
-]
-
-// predermined coordinates for ships on enemy waters
-const enemyShipData = [
-  ['a2', 5, 'h'],
-  ['c4', 4, 'v'],
-  ['j7', 4, 'h'],
-  ['e7', 3, 'v'],
-  ['h1', 2, 'h'],
-]
-
 /**
  * Checks if the game is finished based on the status of both friendly and enemy gameboards.
  *
@@ -39,19 +21,22 @@ const isGameFinished = (friendlyBoard, enemyBoard) =>
 /**
  * Executes the main game loop for the Battleship game.
  */
-const gameLoop = () => {
+const gameLoop = (friendlyBoard) => {
   // create gameboards
-  const friendlyBoard = Gameboard()
   const enemyBoard = Gameboard()
 
   // create players
   const friendlyPlayer = Player(playerName, enemyBoard)
   const enemyPlayer = ComputerPlayer(friendlyBoard)
 
-  // place the ships on friendlyBoard
-  friendlyShipData.forEach((ship) =>
-    friendlyBoard.placeShip(ship[0], ship[1], ship[2])
-  )
+  // predermined coordinates for ships on enemy waters
+  const enemyShipData = [
+    ['a2', 5, 'h'],
+    ['c4', 4, 'v'],
+    ['j7', 4, 'h'],
+    ['e7', 3, 'v'],
+    ['h1', 2, 'h'],
+  ]
   // place the ships on enemyboard
   enemyShipData.forEach((ship) =>
     enemyBoard.placeShip(ship[0], ship[1], ship[2])
@@ -83,14 +68,10 @@ const gameLoop = () => {
 
         Interface.showEndScreen(enemyBoard.areAllShipsSunk(), playerName)
 
-        document.querySelector('#restart').addEventListener('click', gameLoop)
-
-        document
-          .querySelector('#restartWithNewShips')
-          .addEventListener('click', (e) => {
-            Interface.showShipsPlacingScreen()
-            enableShipsPlacementScreenEventListeners()
-          })
+        document.querySelector('#restart').addEventListener('click', (e) => {
+          Interface.showShipsPlacingScreen()
+          enableShipsPlacementScreenEventListeners()
+        })
       }
     }, 300)
   }
@@ -114,28 +95,37 @@ document.querySelector('.startForm').addEventListener('submit', (e) => {
  * Places event listeners on the ships placement screen.
  */
 const enableShipsPlacementScreenEventListeners = () => {
+  const continueBtn = document.querySelector('#continue')
+
   const shipsData = []
   const dummyBoard = Gameboard()
+  const lengths = [2, 3, 4, 4, 5]
 
   document.querySelectorAll('.cell').forEach((cell) =>
     cell.addEventListener('click', (e) => {
       const index = e.target.attributes['data-index'].value
+      if (shipsData.length >= 5) return
 
-      shipsData.push([index, 5, 'h'])
+      try {
+        let start = index
+        let length = lengths.at(-1)
+        let orientation = Math.round(Math.random()) ? 'h' : 'v'
 
-      let [start, length, orientation] = shipsData.at(-1)
+        dummyBoard.placeShip(start, length, orientation)
+        shipsData.push([start, length, orientation])
+        lengths.pop()
+        if (shipsData.length === 5) {
+          continueBtn.removeAttribute('disabled')
+        }
+      } catch (error) {
+        console.log(error)
+      }
 
-      dummyBoard.placeShip(start, length, orientation)
       Interface.showPlacedShips(dummyBoard.getShipsState())
     })
   )
 
-  // todo: Implement ships placing logic
-
-  document.querySelector('#continue').addEventListener('click', (e) => {
-    friendlyShipData = shipsData
-    gameLoop()
-  })
+  continueBtn.addEventListener('click', (e) => gameLoop(dummyBoard))
 }
 
 /**

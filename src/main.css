@@ -206,6 +206,11 @@ input[type='submit'] {
     rgb(94, 255, 0) 0px 18px 36px -18px inset;
 }
 
+.shipsPlacingScreen .continue:valid {
+  background-color: rgb(43, 255, 0);
+  color: white;
+}
+
 /* TABLET & DESKTOP DISPLAYS */
 
 @media only screen and (min-width: 768px) {
