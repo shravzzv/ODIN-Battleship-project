@@ -6,22 +6,13 @@ import { ComputerPlayer } from './ComputerPlayer'
 import { Interface } from './Interface'
 
 Interface.showHomeScreen()
-let playerName
-
-/**
- * Checks if the game is finished based on the status of both friendly and enemy gameboards.
- *
- * @param {Object} friendlyBoard - The friendly player's gameboard.
- * @param {Object} enemyBoard - The enemy player's gameboard.
- * @returns {boolean} True if either all friendly or all enemy ships are sunk, indicating the end of the game.
- */
-const isGameFinished = (friendlyBoard, enemyBoard) =>
-  friendlyBoard.areAllShipsSunk() || enemyBoard.areAllShipsSunk()
 
 /**
  * Executes the main game loop for the Battleship game.
+ * @param {Object} friendlyBoard - The gameboard object of the player.
+ * @param {string} playerName - The name of the player.
  */
-const gameLoop = (friendlyBoard) => {
+const gameLoop = (friendlyBoard, playerName) => {
   // create gameboards
   const enemyBoard = Gameboard()
 
@@ -61,7 +52,8 @@ const gameLoop = (friendlyBoard) => {
       enemyPlayer.attack()
       Interface.markFriendlyCellAsAttacked(enemyPlayer.getLastAttack().index)
 
-      if (isGameFinished(friendlyBoard, enemyBoard)) {
+      // Game finished
+      if (friendlyBoard.areAllShipsSunk() || enemyBoard.areAllShipsSunk()) {
         document
           .querySelectorAll('.board.enemy .cell')
           .forEach((cell) => cell.removeEventListener('click', attackEnemy))
@@ -70,7 +62,7 @@ const gameLoop = (friendlyBoard) => {
 
         document.querySelector('#restart').addEventListener('click', (e) => {
           Interface.showShipsPlacingScreen()
-          enableShipsPlacementScreenEventListeners()
+          enableShipsPlacementScreenEventListeners(playerName)
         })
       }
     }, 300)
@@ -81,55 +73,99 @@ const gameLoop = (friendlyBoard) => {
     .forEach((cell) => cell.addEventListener('click', attackEnemy))
 }
 
-// Start a new game after user sumbits their name & places ships
+// Event listener for the home screen
 document.querySelector('.startForm').addEventListener('submit', (e) => {
   e.preventDefault()
-  playerName = e.target.elements.playerName.value.trim()
+  const playerName = e.target.elements.playerName.value.trim()
   if (!playerName) return
 
   Interface.showShipsPlacingScreen()
-  enableShipsPlacementScreenEventListeners()
+  enableShipsPlacementScreenEventListeners(playerName)
 })
 
 /**
  * Places event listeners on the ships placement screen.
  */
-const enableShipsPlacementScreenEventListeners = () => {
+const enableShipsPlacementScreenEventListeners = (playerName) => {
+  const cells = document.querySelectorAll('.cell')
   const continueBtn = document.querySelector('#continue')
+  const ships = document.querySelectorAll('.shipContainer')
+  const playerBoard = Gameboard()
+  const shipsTracker = []
 
-  const shipsData = []
-  const dummyBoard = Gameboard()
-  const lengths = [2, 3, 4, 4, 5]
+  // ! you're not actually dragging anything.
 
-  document.querySelectorAll('.cell').forEach((cell) =>
-    cell.addEventListener('click', (e) => {
-      const index = e.target.attributes['data-index'].value
-      if (shipsData.length >= 5) return
+  cells.forEach((cell) => cell.setAttribute('draggable', true))
 
-      try {
-        let start = index
-        let length = lengths.at(-1)
-        let orientation = Math.round(Math.random()) ? 'h' : 'v'
-
-        dummyBoard.placeShip(start, length, orientation)
-        shipsData.push([start, length, orientation])
-        lengths.pop()
-        if (shipsData.length === 5) {
-          continueBtn.removeAttribute('disabled')
-        }
-      } catch (error) {
-        console.log(error)
-      }
-
-      Interface.showPlacedShips(dummyBoard.getShipsState())
+  ships.forEach((ship) =>
+    ship.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text', e.target.getAttribute('data-orientation'))
+      e.dataTransfer.setData('number', e.target.getAttribute('data-length'))
+      e.dataTransfer.setData('plain-text', e.target.id)
     })
   )
 
-  continueBtn.addEventListener('click', (e) => gameLoop(dummyBoard))
+  ships.forEach((ship) =>
+    ship.addEventListener('click', (e) => {
+      const orientation = e.target.getAttribute('data-orientation')
+      e.target.setAttribute('data-orientation', orientation === 'h' ? 'v' : 'h')
+      e.target.classList.toggle('vertical')
+    })
+  )
+
+  // remove ships placed on the board
+  ships.forEach((ship) =>
+    ship.addEventListener('dragend', (e) => {
+      if (shipsTracker.includes(e.target.id)) e.target.remove()
+    })
+  )
+
+  cells.forEach((cell) =>
+    cell.addEventListener('dragstart', (e) => {
+      // todo: be able to drag ships within the board
+    })
+  )
+
+  cells.forEach((cell) =>
+    cell.addEventListener('dragover', (e) => {
+      e.preventDefault()
+      // todo: show invalid cells in the UI to drag onto
+    })
+  )
+
+  cells.forEach((cell) =>
+    cell.addEventListener('drop', (e) => {
+      const startIndex = e.target.attributes['data-index'].value
+      const length = parseInt(e.dataTransfer.getData('number'))
+      const orientation = e.dataTransfer.getData('text')
+      const id = e.dataTransfer.getData('plain-text')
+
+      if (!length || !orientation) return
+      if (playerBoard.getShipsState().length >= 5) return
+
+      try {
+        playerBoard.placeShip(startIndex, length, orientation)
+
+        if (playerBoard.getShipsState().length === 5)
+          continueBtn.removeAttribute('disabled')
+
+        shipsTracker.push(id)
+      } catch (error) {
+        console.log(error)
+        alert(error.message)
+        // todo: show error messages in the UI.
+      }
+
+      Interface.showPlacedShips(playerBoard.getShipsState())
+    })
+  )
+
+  continueBtn.addEventListener('click', () => gameLoop(playerBoard, playerName))
 }
 
 /**
  * Bridge:
- * Make a ships placing component (take inspiration from others submissions)
- * Tie the game workflow together
+ * Make the drag UI work.
+ * Make ships dragabble after placing them on the board.
+ * Display available and unavailable cells.
  */
