@@ -260,6 +260,10 @@ input[type='submit'] {
   background-color: rgb(43, 255, 0);
 }
 
+.shipsPlacingScreen .cell.highlight {
+  background-color: rgb(43, 255, 0);
+}
+
 /* TABLET & DESKTOP DISPLAYS */
 
 @media only screen and (min-width: 768px) {

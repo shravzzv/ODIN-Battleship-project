@@ -51,11 +51,11 @@ const ShipsPlacingScreen = () => {
 
   const ship4 = document.createElement('div')
   ship4.id = 'ship4'
-  ship4.className = 'shipContainer'
+  ship4.className = 'shipContainer vertical'
   ship4.textContent = '🛳️🛳️🛳️'
   ship4.setAttribute('draggable', true)
   ship4.setAttribute('data-length', 3)
-  ship4.setAttribute('data-orientation', 'h')
+  ship4.setAttribute('data-orientation', 'v')
 
   const ship5 = document.createElement('div')
   ship5.id = 'ship5'

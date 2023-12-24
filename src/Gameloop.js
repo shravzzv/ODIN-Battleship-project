@@ -95,7 +95,14 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
 
   // ! you're not actually dragging anything.
 
-  cells.forEach((cell) => cell.setAttribute('draggable', true))
+  // change ship orientation on click
+  ships.forEach((ship) =>
+    ship.addEventListener('click', (e) => {
+      const orientation = e.target.getAttribute('data-orientation')
+      e.target.setAttribute('data-orientation', orientation === 'h' ? 'v' : 'h')
+      e.target.classList.toggle('vertical')
+    })
+  )
 
   ships.forEach((ship) =>
     ship.addEventListener('dragstart', (e) => {
@@ -104,14 +111,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
       e.dataTransfer.setData('plain-text', e.target.id)
     })
   )
-
-  ships.forEach((ship) =>
-    ship.addEventListener('click', (e) => {
-      const orientation = e.target.getAttribute('data-orientation')
-      e.target.setAttribute('data-orientation', orientation === 'h' ? 'v' : 'h')
-      e.target.classList.toggle('vertical')
-    })
-  )
+  // todo: Make ship dragging image match the correct length and orientation
 
   // remove ships placed on the board
   ships.forEach((ship) =>
@@ -121,17 +121,33 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
   )
 
   cells.forEach((cell) =>
-    cell.addEventListener('dragstart', (e) => {
-      // todo: be able to drag ships within the board
-    })
+    cell.addEventListener('dragenter', (e) =>
+      e.target.classList.add('highlight')
+    )
   )
 
   cells.forEach((cell) =>
     cell.addEventListener('dragover', (e) => {
       e.preventDefault()
-      // todo: show invalid cells in the UI to drag onto
     })
   )
+
+  cells.forEach((cell) => {
+    cell.addEventListener('dragleave', (e) => {
+      const index = e.target.attributes['data-index'].value
+
+      if (shipsTracker.length < 1) e.target.classList.remove('highlight')
+      else {
+        if (
+          playerBoard
+            .getShipsState()
+            .every((item) => !item.indices.includes(index))
+        ) {
+          e.target.classList.remove('highlight')
+        }
+      }
+    })
+  })
 
   cells.forEach((cell) =>
     cell.addEventListener('drop', (e) => {
@@ -150,10 +166,24 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
           continueBtn.removeAttribute('disabled')
 
         shipsTracker.push(id)
+
+        // if ship is successfully placed, highlight all its indices
+        playerBoard
+          .getShipsState()
+          .at(-1)
+          ?.indices.forEach((index) =>
+            document
+              .querySelector(`.cell[data-index = ${index}]`)
+              .classList.add('highlight')
+          )
       } catch (error) {
-        console.log(error)
         alert(error.message)
-        // todo: show error messages in the UI.
+        if (
+          playerBoard
+            .getShipsState()
+            .every((item) => !item.indices.includes(startIndex))
+        )
+          e.target.classList.remove('highlight')
       }
 
       Interface.showPlacedShips(playerBoard.getShipsState())
