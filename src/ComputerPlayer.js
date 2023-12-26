@@ -1,10 +1,10 @@
 /**
  * Factory function for creating a Battleship Computer Player.
  *
- * @param {Object} enemyGameboard - The Gameboard object of the human player's fleet.
+ * @param {Object} humanGameboard - The Gameboard object of the human player's fleet.
  * @returns {Object} - ComputerPlayer object with methods for making random attacks.
  */
-export const ComputerPlayer = (enemyGameboard) => {
+export const ComputerPlayer = (humanGameboard) => {
   /**
    * Array to store information about all the attacks.
    *
@@ -14,6 +14,13 @@ export const ComputerPlayer = (enemyGameboard) => {
    * @private
    */
   const _attacks = []
+
+  /**
+   * Stores the adjacent indices of the last hit.
+   *
+   * @type {String[]}
+   */
+  const lastHitAdj = []
 
   /**
    * Generates a random integer between a specified range, inclusive.
@@ -33,7 +40,6 @@ export const ComputerPlayer = (enemyGameboard) => {
 
   /**
    * Generates a random index from the array of coordinates on a standard Battleship game board (from 'a1' to 'j10').
-   * The computer is unable to generate indices out of the board.
    *
    * @returns {string} - A random coordinate index, e.g., 'b3'.
    */
@@ -42,8 +48,7 @@ export const ComputerPlayer = (enemyGameboard) => {
 
     for (let i = 'a'.charCodeAt(0); i <= 'j'.charCodeAt(0); i++) {
       for (let j = 1; j <= 10; j++) {
-        const coordinate = String.fromCharCode(i) + j
-        coordinatesArray.push(coordinate)
+        coordinatesArray.push(String.fromCharCode(i) + j)
       }
     }
 
@@ -56,7 +61,7 @@ export const ComputerPlayer = (enemyGameboard) => {
    * @param {string} index - The index whose surrounding indices are wanted.
    * @returns {string[]} - All the valid surrounding indices of the index.
    */
-  const _getAllAdjacentIndices = (index) => {
+  const _getAdjacentIndices = (index) => {
     const indices = []
 
     const startX = index.at(0)
@@ -78,46 +83,38 @@ export const ComputerPlayer = (enemyGameboard) => {
   }
 
   /**
-   * Retrieves an unattacked adjacent index of the last attack, allowing the computer to grope for ships.
+   * Returns a valid index for the computer step.
    *
-   * @returns {string} - The next target index.
-   * @private
-   */
-  const _getLastAttackAdjacent = () => {
-    const lastAttackIndex = getLastAttack().index
-
-    const adjacentNonAttackedIndices = _getAllAdjacentIndices(
-      lastAttackIndex
-    ).filter((index) => !_attacks.includes(index))
-
-    return adjacentNonAttackedIndices[0]
-  }
-
-  /**
-   * Returns a valid index for the next computer step.
-   *
-   * @returns {string} index - The computer's choice for the next attack.
+   * @returns {string} index - The computer's choice for the attack.
    *
    */
   const _getIndex = () => {
-    let index
+    let index = _getRandomIndex()
 
-    if (getLastAttack()?.isHit) {
-      index = _getLastAttackAdjacent()
-    } else {
-      index = _getRandomIndex()
+    // todo: When a hit has been made, the next steps should be attacking all of the available surroundings
+
+    // if last attack was a hit, cycle attacking its surrounding indices
+    // if (getLastAttack()?.isHit) {
+    //   const adjIndices = _getAdjacentIndices(getLastAttack().index)
+    //   console.log(adjIndices)
+    // }
+    // ! Problem: Here, last attack's index changes after each attack.
+
+    if (lastHitAdj.length) {
+      index = lastHitAdj.pop()
     }
 
-    // this makes the computer unable to attack on an index twice
+    // prevent multiple attacks on same index
     while (_attacks.some((attack) => attack.index === index)) {
       index = _getRandomIndex()
+      // * why random?
     }
 
     return index
   }
 
   /**
-   * Makes a random attack on the human player's Gameboard.
+   * Makes a attack on the human player's Gameboard.
    *
    * @throws {Error} - Throws an error if the attack is invalid.
    * @returns {string} - The attack result.
@@ -129,13 +126,25 @@ export const ComputerPlayer = (enemyGameboard) => {
       }
 
       const index = _getIndex()
-      enemyGameboard.receiveAttack(index)
+      humanGameboard.receiveAttack(index)
 
-      const isHit = enemyGameboard
+      const isHit = humanGameboard
         .getShipsState()
         .some((item) => item.indices.includes(index))
 
       _attacks.push({ index, isHit })
+
+      // if isHit, push its unattacked adjacents to lastHitAdj
+      if (isHit) {
+        const adj = _getAdjacentIndices(index)
+        // remove already attacked indices
+        const pruned = adj.filter((idx) =>
+          getAttacks().every((attack) => attack.index !== idx)
+        )
+        if (!lastHitAdj.length) lastHitAdj.push(...pruned)
+
+        console.log(lastHitAdj)
+      }
 
       return `Computer attacked at ${index}`
     } catch (error) {
@@ -163,3 +172,24 @@ export const ComputerPlayer = (enemyGameboard) => {
     getLastAttack,
   }
 }
+
+/**
+ * ? How does a human player attack the board?
+ * He makes a random attack.
+ * If the attack is a miss, he makes another random attack.
+ * If the attack is a hit, he attacks one of its surrounding indices.
+ *  If the attack is a miss, he attacks another of the hit's surrounding indices.
+ *  If the attack is a hit, he goes on attacking in the same direction until he reaches an index which is a miss.
+ *    Then he goes back and attacks the index on the other side of the first hit.
+ *      If the attack was a miss, he has sunk the ship. He goes back to attacking at random.
+ *      If the attack was a hit, he continues attacking in the same direction until he gets a miss.
+ *
+ */
+
+/**
+ * * The computer player may be able to keep track of the attacked ships and their indices, just as a human player would.
+ * Create a variable named const startingHits = []
+ * or const hits = [{start: 'a4', }]
+ */
+
+// todo: When a hit has been made, the next steps should be attacking all of the available surroundings
