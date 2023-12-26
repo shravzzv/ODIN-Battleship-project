@@ -89,6 +89,7 @@ document.querySelector('.startForm').addEventListener('submit', (e) => {
 const enableShipsPlacementScreenEventListeners = (playerName) => {
   const cells = document.querySelectorAll('.cell')
   const continueBtn = document.querySelector('#continue')
+  const resetBtn = document.querySelector('#reset')
   const ships = document.querySelectorAll('.shipContainer')
   const playerBoard = Gameboard()
   const shipsTracker = []
@@ -157,6 +158,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
       const length = parseInt(e.dataTransfer.getData('number'))
       const startIndex = e.target.attributes['data-index'].value
 
+      if (!length && !orientation) return
       if (playerBoard.getShipsState().length >= 5) return
 
       try {
@@ -176,6 +178,8 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
               .querySelector(`.cell[data-index = ${index}]`)
               .classList.add('highlight')
           )
+
+        resetBtn.disabled = false
       } catch (error) {
         alert(error.message)
         // if ship placement leads to an error, remove the highlight from the cell only if it is empty
@@ -192,6 +196,11 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
   )
 
   continueBtn.addEventListener('click', () => gameLoop(playerBoard, playerName))
+
+  resetBtn.addEventListener('click', () => {
+    Interface.showShipsPlacingScreen(playerName)
+    enableShipsPlacementScreenEventListeners(playerName)
+  })
 }
 
 /**

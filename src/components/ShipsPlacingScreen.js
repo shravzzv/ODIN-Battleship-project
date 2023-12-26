@@ -11,7 +11,7 @@ const ShipsPlacingScreen = (name) => {
   element.className = 'shipsPlacingScreen'
 
   const heading = document.createElement('h2')
-  heading.textContent = `${name}, Place your ships`
+  heading.textContent = `${name}, place your ships`
   heading.className = 'heading'
   element.appendChild(heading)
 
@@ -72,12 +72,23 @@ const ShipsPlacingScreen = (name) => {
   shipsContainer.appendChild(ship4)
   shipsContainer.appendChild(ship5)
 
+  const buttons = document.createElement('div')
+  buttons.className = 'buttons'
+  element.appendChild(buttons)
+
   const continueBtn = document.createElement('button')
   continueBtn.id = 'continue'
   continueBtn.className = 'continue'
   continueBtn.textContent = 'Continue'
   continueBtn.setAttribute('disabled', true)
-  element.appendChild(continueBtn)
+  buttons.appendChild(continueBtn)
+
+  const resetBtn = document.createElement('button')
+  resetBtn.id = 'reset'
+  resetBtn.className = 'reset'
+  resetBtn.textContent = 'Reset'
+  resetBtn.disabled = true
+  buttons.appendChild(resetBtn)
 
   return element
 }
