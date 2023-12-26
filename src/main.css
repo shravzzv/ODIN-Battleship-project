@@ -44,12 +44,15 @@
   --shipsContainer-width: 40vmin;
   --shipsContainer-height: 60vmin;
   --shipsContainer-bdr-radius: 15px;
+  --ships-container-bg-clr: white;
+  --ship-container-bg-clr: white;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --primary-color: white;
     --background-color: #1c1c1c;
+    --ships-container-bg-clr: black;
   }
 }
 
@@ -274,7 +277,7 @@ input[type='submit']:hover {
   border-radius: var(--shipsContainer-bdr-radius);
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  background-color: white;
+  background-color: var(--ships-container-bg-clr);
 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -296,6 +299,7 @@ input[type='submit']:hover {
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   transform-origin: center;
   transition: transform 300ms ease-in-out;
+  background-color: var(--ship-container-bg-clr);
 }
 
 .shipContainer.vertical {
