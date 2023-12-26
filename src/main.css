@@ -25,12 +25,25 @@
   --padding-medium: 1rem;
   --padding-large: 1.5rem;
 
-  /* Board variables */
+  /* Buttons */
+  --btn-padding: 0.5rem 1rem;
+  --btn-border-radius: 15px;
+
+  /* Inputs */
+  --input-padding: 0.5rem 1rem;
+  --input-border-radius: 15px;
+
+  /* Board component */
   --board-size: 100%;
 
-  /* Cell variables */
+  /* Cell component */
   --cell-size: 9vmin;
   --cell-border-radius: 3px;
+
+  /* Ships placement component */
+  --shipsContainer-width: 40vmin;
+  --shipsContainer-height: 60vmin;
+  --shipsContainer-bdr-radius: 15px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,6 +77,50 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+button {
+  padding: var(--btn-padding);
+  border-radius: var(--btn-border-radius);
+  cursor: pointer;
+  text-align: center;
+  border: none;
+  transition: transform 300ms ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+input {
+  padding: var(--input-padding);
+  border-radius: var(--input-border-radius);
+  border: none;
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  outline: none;
+}
+
+input[type='submit'] {
+  cursor: pointer;
+  box-shadow: none;
+  transition: transform 300ms ease;
+}
+
+input[type='submit']:hover {
+  transform: scale(1.1);
+}
+
+[draggable='true'] {
+  cursor: grab;
+}
+
+[draggable='true']:active {
+  cursor: grabbing;
 }
 
 /* HEADER COMPONENT */
@@ -117,7 +174,7 @@ ul {
 /* FOOTER */
 .footer {
   text-align: center;
-  margin: 2em auto;
+  margin: 0 auto 2em auto;
   padding: var(--padding-large);
 }
 
@@ -130,10 +187,127 @@ ul {
   align-items: center;
   flex-direction: column-reverse;
   gap: 1rem;
+  color: var(--primary-color);
 }
 
 .gitHubImage {
   height: 50px;
+}
+
+/* START SCREEN */
+.startScreen {
+  text-align: center;
+  padding: var(--padding-large);
+}
+
+.startScreen > form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+/* END SCREEN */
+.endScreen {
+  text-align: center;
+  padding: var(--padding-large);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+/* SHIPS PLACING SCREEN */
+.shipsPlacingScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.shipsPlacingScreen .heading {
+  margin: 0;
+}
+
+.shipsPlacingScreen .board,
+.shipsPlacingScreen .board .cell {
+  cursor: none;
+}
+
+.shipsPlacingScreen .board .cell:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.shipsPlacingScreen .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.shipsPlacingScreen .continue:valid {
+  color: white;
+  background-color: rgb(43, 255, 0);
+}
+
+.shipsPlacingScreen .reset:valid {
+  color: white;
+  background-color: rgba(255, 0, 34, 1);
+}
+
+.shipsPlacingScreen .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5em;
+}
+
+.shipsContainer {
+  padding: var(--padding-large);
+  height: var(--shipsContainer-height);
+  width: var(--shipsContainer-width);
+  border-radius: var(--shipsContainer-bdr-radius);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  background-color: white;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  gap: 0.5rem;
+}
+
+.shipContainer {
+  padding: var(--padding-small);
+  border: 1px solid #000;
+  width: max-content;
+  height: max-content;
+  border-radius: var(--shipsContainer-bdr-radius);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  transform-origin: center;
+  transition: transform 300ms ease-in-out;
+}
+
+.shipContainer.vertical {
+  transform: rotate(90deg);
+}
+
+.shipsContainer [draggable='true']:active {
+  background-color: rgb(43, 255, 0);
+}
+
+.shipsPlacingScreen .cell.highlight {
+  background-color: rgb(43, 255, 0);
 }
 
 /* TABLET & DESKTOP DISPLAYS */
@@ -150,6 +324,7 @@ ul {
   /* HEADER COMPONENT */
   .header .title {
     font-size: var(--heading-font-size);
+    margin-bottom: 0.25em;
   }
 
   /* BOARD COMPONENT */
@@ -195,6 +370,8 @@ ul {
     flex: 1;
     padding: var(--padding-large);
   }
+
+  /* START SCREEN */
 }
 
 /* KEYFRAMES */

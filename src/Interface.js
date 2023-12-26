@@ -1,4 +1,10 @@
+import Header from './components/Header'
+import Main from './components/Main'
+import Footer from './components/Footer'
+import StartScreen from './components/StartScreen'
 import Arena from './components/Arena'
+import EndScreen from './components/EndScreen'
+import ShipsPlacingScreen from './components/ShipsPlacingScreen'
 
 /**
  * Module for DOM interaction.
@@ -14,11 +20,27 @@ export const Interface = (() => {
   const _root = document.querySelector('#root')
 
   /**
+   * Displays the home screen of the game.
+   * This function initializes the game by appending the header, main content, and footer to the root element.
+   * It further appends the start screen to the main content section.
+   * @function
+   * @returns {void}
+   */
+  const showHomeScreen = () => {
+    _root.appendChild(Header())
+    _root.appendChild(Main())
+    _root.appendChild(Footer())
+
+    document.querySelector('.main').appendChild(StartScreen())
+  }
+
+  /**
    * Display both the player’s boards and renders them using information from their respective boards.
    */
   const renderBoards = (friendlyBoard, enemyBoard) => {
-    _root.appendChild(Arena())
-
+    const mainEl = document.querySelector('.main')
+    mainEl.innerHTML = ``
+    mainEl.appendChild(Arena())
     // represent ships in the UI
     _displayShipsOnFriendlyBoard(friendlyBoard.getShipsState())
     _displayShipsOnEnemyBoard(enemyBoard.getShipsState())
@@ -82,9 +104,35 @@ export const Interface = (() => {
     cell.classList.add('attacked')
   }
 
+  const showEndScreen = (isWon, name) => {
+    const mainEl = document.querySelector('.main')
+    mainEl.innerHTML = ``
+    mainEl.appendChild(EndScreen(isWon, name))
+  }
+
+  const showShipsPlacingScreen = (name) => {
+    const main = document.querySelector('.main')
+
+    main.innerHTML = ''
+    main.appendChild(ShipsPlacingScreen(name))
+  }
+
+  const showPlacedShips = (shipsState) =>
+    shipsState.forEach((item) => {
+      let { indices } = item
+      indices.forEach((index) => {
+        let cell = document.querySelector(`.cell[data-index=${index}]`)
+        cell.textContent = '🛳️'
+      })
+    })
+
   return {
     renderBoards,
     markEnemyCellAsAttacked,
     markFriendlyCellAsAttacked,
+    showEndScreen,
+    showHomeScreen,
+    showShipsPlacingScreen,
+    showPlacedShips,
   }
 })()
