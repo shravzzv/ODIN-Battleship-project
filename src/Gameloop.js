@@ -61,7 +61,7 @@ const gameLoop = (friendlyBoard, playerName) => {
         Interface.showEndScreen(enemyBoard.areAllShipsSunk(), playerName)
 
         document.querySelector('#restart').addEventListener('click', (e) => {
-          Interface.showShipsPlacingScreen()
+          Interface.showShipsPlacingScreen(playerName)
           enableShipsPlacementScreenEventListeners(playerName)
         })
       }
@@ -79,7 +79,7 @@ document.querySelector('.startForm').addEventListener('submit', (e) => {
   const playerName = e.target.elements.playerName.value.trim()
   if (!playerName) return
 
-  Interface.showShipsPlacingScreen()
+  Interface.showShipsPlacingScreen(playerName)
   enableShipsPlacementScreenEventListeners(playerName)
 })
 
@@ -93,8 +93,6 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
   const playerBoard = Gameboard()
   const shipsTracker = []
 
-  // ! you're not actually dragging anything.
-
   // change ship orientation on click
   ships.forEach((ship) =>
     ship.addEventListener('click', (e) => {
@@ -104,14 +102,17 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
     })
   )
 
+  // allows ships to be dragged, and send data during drag
   ships.forEach((ship) =>
     ship.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text', e.target.getAttribute('data-orientation'))
-      e.dataTransfer.setData('number', e.target.getAttribute('data-length'))
       e.dataTransfer.setData('plain-text', e.target.id)
+      e.dataTransfer.setData('number', e.target.getAttribute('data-length'))
+      e.dataTransfer.setData('text', e.target.getAttribute('data-orientation'))
+
+      // todo: Make ship dragging image match the correct length and orientation
+      e.dataTransfer.setDragImage(e.target, 0, 0)
     })
   )
-  // todo: Make ship dragging image match the correct length and orientation
 
   // remove ships placed on the board
   ships.forEach((ship) =>
@@ -151,12 +152,11 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
 
   cells.forEach((cell) =>
     cell.addEventListener('drop', (e) => {
-      const startIndex = e.target.attributes['data-index'].value
-      const length = parseInt(e.dataTransfer.getData('number'))
-      const orientation = e.dataTransfer.getData('text')
       const id = e.dataTransfer.getData('plain-text')
+      const orientation = e.dataTransfer.getData('text')
+      const length = parseInt(e.dataTransfer.getData('number'))
+      const startIndex = e.target.attributes['data-index'].value
 
-      if (!length || !orientation) return
       if (playerBoard.getShipsState().length >= 5) return
 
       try {
@@ -178,6 +178,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
           )
       } catch (error) {
         alert(error.message)
+        // if ship placement leads to an error, remove the highlight from the cell only if it is empty
         if (
           playerBoard
             .getShipsState()
@@ -195,7 +196,5 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
 
 /**
  * Bridge:
- * Make the drag UI work.
- * Make ships dragabble after placing them on the board.
  * Display available and unavailable cells.
  */

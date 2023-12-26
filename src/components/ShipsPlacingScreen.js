@@ -3,14 +3,15 @@ import Board from './Board'
 /**
  * Creates an placing ships element for the Battleship game.
  * @function
+ * @param {string} name - The player name
  * @returns {HTMLElement} - The place ships component.
  */
-const ShipsPlacingScreen = () => {
+const ShipsPlacingScreen = (name) => {
   const element = document.createElement('div')
   element.className = 'shipsPlacingScreen'
 
   const heading = document.createElement('h2')
-  heading.textContent = 'Place your ships'
+  heading.textContent = `${name}, Place your ships`
   heading.className = 'heading'
   element.appendChild(heading)
 

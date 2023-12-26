@@ -110,11 +110,11 @@ export const Interface = (() => {
     mainEl.appendChild(EndScreen(isWon, name))
   }
 
-  const showShipsPlacingScreen = () => {
+  const showShipsPlacingScreen = (name) => {
     const main = document.querySelector('.main')
 
     main.innerHTML = ''
-    main.appendChild(ShipsPlacingScreen())
+    main.appendChild(ShipsPlacingScreen(name))
   }
 
   const showPlacedShips = (shipsState) =>
