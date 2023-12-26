@@ -36,11 +36,11 @@ const ShipsPlacingScreen = (name) => {
 
   const ship2 = document.createElement('div')
   ship2.id = 'ship2'
-  ship2.className = 'shipContainer'
+  ship2.className = 'shipContainer vertical'
   ship2.textContent = '🛳️🛳️🛳️🛳️'
   ship2.setAttribute('draggable', true)
   ship2.setAttribute('data-length', 4)
-  ship2.setAttribute('data-orientation', 'h')
+  ship2.setAttribute('data-orientation', 'v')
 
   const ship3 = document.createElement('div')
   ship3.id = 'ship3'
@@ -52,25 +52,25 @@ const ShipsPlacingScreen = (name) => {
 
   const ship4 = document.createElement('div')
   ship4.id = 'ship4'
-  ship4.className = 'shipContainer vertical'
+  ship4.className = 'shipContainer'
   ship4.textContent = '🛳️🛳️🛳️'
   ship4.setAttribute('draggable', true)
   ship4.setAttribute('data-length', 3)
-  ship4.setAttribute('data-orientation', 'v')
+  ship4.setAttribute('data-orientation', 'h')
 
   const ship5 = document.createElement('div')
   ship5.id = 'ship5'
-  ship5.className = 'shipContainer'
+  ship5.className = 'shipContainer vertical'
   ship5.textContent = '🛳️🛳️'
   ship5.setAttribute('draggable', true)
   ship5.setAttribute('data-length', 2)
-  ship5.setAttribute('data-orientation', 'h')
+  ship5.setAttribute('data-orientation', 'v')
 
   shipsContainer.appendChild(ship1)
+  shipsContainer.appendChild(ship5)
   shipsContainer.appendChild(ship2)
   shipsContainer.appendChild(ship3)
   shipsContainer.appendChild(ship4)
-  shipsContainer.appendChild(ship5)
 
   const buttons = document.createElement('div')
   buttons.className = 'buttons'

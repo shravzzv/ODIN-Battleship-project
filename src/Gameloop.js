@@ -110,7 +110,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
       e.dataTransfer.setData('number', e.target.getAttribute('data-length'))
       e.dataTransfer.setData('text', e.target.getAttribute('data-orientation'))
 
-      // todo: Make ship dragging image match the correct length and orientation
+      // todo: Make ship dragging image match the correct orientation
       e.dataTransfer.setDragImage(e.target, 0, 0)
     })
   )
@@ -202,8 +202,3 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
     enableShipsPlacementScreenEventListeners(playerName)
   })
 }
-
-/**
- * Bridge:
- * Display available and unavailable cells.
- */
