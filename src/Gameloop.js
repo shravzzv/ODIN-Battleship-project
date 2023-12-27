@@ -61,7 +61,7 @@ const gameLoop = (friendlyBoard, playerName) => {
           enableShipsPlacementScreenEventListeners(playerName)
         })
       }
-    }, 300)
+    }, 500)
   }
 
   document
@@ -216,3 +216,5 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
     continueBtn.disabled = false
   })
 }
+
+// don't allow player turn before enemy has made a move
