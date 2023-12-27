@@ -42,16 +42,19 @@ export const ComputerPlayer = (humanGameboard) => {
    * Generates a random index from the array of coordinates on a standard Battleship game board (from 'a1' to 'j10').
    *
    * @returns {string} - A random coordinate index, e.g., 'b3'.
+   * @private
    */
   const _getRandomIndex = () => {
     const coordinatesArray = []
 
+    // Generate all possible coordinates on the game board.
     for (let i = 'a'.charCodeAt(0); i <= 'j'.charCodeAt(0); i++) {
       for (let j = 1; j <= 10; j++) {
         coordinatesArray.push(String.fromCharCode(i) + j)
       }
     }
 
+    // Select a random index from the coordinates array.
     return coordinatesArray.at(_getRandomIntInclusive(0, 99))
   }
 
@@ -60,6 +63,7 @@ export const ComputerPlayer = (humanGameboard) => {
    *
    * @param {string} index - The index whose surrounding indices are wanted.
    * @returns {string[]} - All the valid surrounding indices of the index.
+   * @private
    */
   const _getAdjacentIndices = (index) => {
     const indices = []
@@ -79,6 +83,7 @@ export const ComputerPlayer = (humanGameboard) => {
       `${String.fromCharCode(startX.charCodeAt(0) + 1)}${startY}`
     )
 
+    // Filter out invalid indices based on the game board dimensions.
     return indices.filter((index) => /^[a-j]([1-9]|10)$/.test(index))
   }
 
@@ -86,22 +91,20 @@ export const ComputerPlayer = (humanGameboard) => {
    * Returns a valid index for the computer step.
    *
    * @returns {string} index - The computer's choice for the attack.
-   *
+   * @private
    */
   const _getIndex = () => {
     let index = _getRandomIndex()
 
+    // If there are unattacked adjacent indices from the last hit, use one of them.
     if (_lastHitAdj.length) {
       index = _lastHitAdj.pop()
     }
 
-    // prevent multiple attacks on same index
+    // Prevent multiple attacks on same index.
     while (_attacks.some((attack) => attack.index === index)) {
       index = _getRandomIndex()
-      // * why random?
     }
-
-    // todo: prevent attacking indices adjacent to ships
 
     return index
   }
@@ -119,6 +122,7 @@ export const ComputerPlayer = (humanGameboard) => {
       }
 
       const index = _getIndex()
+
       humanGameboard.receiveAttack(index)
 
       const isHit = humanGameboard
@@ -129,11 +133,11 @@ export const ComputerPlayer = (humanGameboard) => {
 
       if (isHit) {
         const adj = _getAdjacentIndices(index)
-
         const pruned = adj.filter((idx) =>
           getAttacks().every((attack) => attack.index !== idx)
         )
 
+        // Check if there are hits in the adjacent indices.
         if (
           adj.some((idx) =>
             _attacks.some((attack) => idx === attack.index && attack.isHit)
@@ -163,7 +167,7 @@ export const ComputerPlayer = (humanGameboard) => {
               _lastHitAdj.splice(index, 1)
             })
           } else {
-            // same column
+            // * same column
             // remove all other column elements from adj
             const otherColAdj = pruned.filter(
               (idx) => idx.slice(1) !== currentHit.slice(1)
@@ -187,8 +191,6 @@ export const ComputerPlayer = (humanGameboard) => {
         }
 
         _lastHitAdj.push(...pruned)
-
-        console.log(_lastHitAdj)
       }
 
       return `Computer attacked at ${index}`
@@ -212,6 +214,7 @@ export const ComputerPlayer = (humanGameboard) => {
   const getLastAttack = () => _attacks.at(-1)
 
   /**
+   * Returns the index of the second-to-last hit, or null if there is none.
    *
    * @returns {String | null} - The index of the last hit if there is any or null.
    */
@@ -219,7 +222,7 @@ export const ComputerPlayer = (humanGameboard) => {
     _attacks
       .slice()
       .reverse()
-      .filter((attack) => attack.isHit)[1].index || null
+      .filter((attack) => attack.isHit)[1]?.index || null
 
   return {
     attack,
@@ -227,23 +230,3 @@ export const ComputerPlayer = (humanGameboard) => {
     getLastAttack,
   }
 }
-
-/**
- * ? How does a human player attack the board?
- * He makes a random attack.
- * If the attack is a miss, he makes another random attack.
- * If the attack is a hit, he attacks one of its surrounding indices.
- *  If the attack is a miss, he attacks another of the hit's surrounding indices.
- *  If the attack is a hit, he goes on attacking in the same direction until he reaches an index which is a miss.
- *    Then he goes back and attacks the index on the other side of the first hit.
- *      If the attack was a miss, he has sunk the ship. He goes back to attacking at random.
- *      If the attack was a hit, he continues attacking in the same direction until he gets a miss.
- *
- */
-
-// // todo: When a hit has been made, the next steps should be attacking all of the available surroundings
-// todo: Choose specific direction of attack after a hit.
-
-// todo: After two successful hits, select the direction of the next attacks, whether they should be in the same row or the same column
-
-// ? ships won't be placed adjacent to other ships, can the computer remember this
