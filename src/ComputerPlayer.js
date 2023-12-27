@@ -1,10 +1,10 @@
 /**
  * Factory function for creating a Battleship Computer Player.
  *
- * @param {Object} enemyGameboard - The Gameboard object of the human player's fleet.
+ * @param {Object} humanGameboard - The Gameboard object of the human player's fleet.
  * @returns {Object} - ComputerPlayer object with methods for making random attacks.
  */
-export const ComputerPlayer = (enemyGameboard) => {
+export const ComputerPlayer = (humanGameboard) => {
   /**
    * Array to store information about all the attacks.
    *
@@ -14,6 +14,13 @@ export const ComputerPlayer = (enemyGameboard) => {
    * @private
    */
   const _attacks = []
+
+  /**
+   * Stores the unattacked adjacent indices of the last hit.
+   *
+   * @type {String[]}
+   */
+  const _lastHitAdj = []
 
   /**
    * Generates a random integer between a specified range, inclusive.
@@ -33,20 +40,21 @@ export const ComputerPlayer = (enemyGameboard) => {
 
   /**
    * Generates a random index from the array of coordinates on a standard Battleship game board (from 'a1' to 'j10').
-   * The computer is unable to generate indices out of the board.
    *
    * @returns {string} - A random coordinate index, e.g., 'b3'.
+   * @private
    */
   const _getRandomIndex = () => {
     const coordinatesArray = []
 
+    // Generate all possible coordinates on the game board.
     for (let i = 'a'.charCodeAt(0); i <= 'j'.charCodeAt(0); i++) {
       for (let j = 1; j <= 10; j++) {
-        const coordinate = String.fromCharCode(i) + j
-        coordinatesArray.push(coordinate)
+        coordinatesArray.push(String.fromCharCode(i) + j)
       }
     }
 
+    // Select a random index from the coordinates array.
     return coordinatesArray.at(_getRandomIntInclusive(0, 99))
   }
 
@@ -55,8 +63,9 @@ export const ComputerPlayer = (enemyGameboard) => {
    *
    * @param {string} index - The index whose surrounding indices are wanted.
    * @returns {string[]} - All the valid surrounding indices of the index.
+   * @private
    */
-  const _getAllAdjacentIndices = (index) => {
+  const _getAdjacentIndices = (index) => {
     const indices = []
 
     const startX = index.at(0)
@@ -74,41 +83,25 @@ export const ComputerPlayer = (enemyGameboard) => {
       `${String.fromCharCode(startX.charCodeAt(0) + 1)}${startY}`
     )
 
+    // Filter out invalid indices based on the game board dimensions.
     return indices.filter((index) => /^[a-j]([1-9]|10)$/.test(index))
   }
 
   /**
-   * Retrieves an unattacked adjacent index of the last attack, allowing the computer to grope for ships.
+   * Returns a valid index for the computer step.
    *
-   * @returns {string} - The next target index.
+   * @returns {string} index - The computer's choice for the attack.
    * @private
    */
-  const _getLastAttackAdjacent = () => {
-    const lastAttackIndex = getLastAttack().index
-
-    const adjacentNonAttackedIndices = _getAllAdjacentIndices(
-      lastAttackIndex
-    ).filter((index) => !_attacks.includes(index))
-
-    return adjacentNonAttackedIndices[0]
-  }
-
-  /**
-   * Returns a valid index for the next computer step.
-   *
-   * @returns {string} index - The computer's choice for the next attack.
-   *
-   */
   const _getIndex = () => {
-    let index
+    let index = _getRandomIndex()
 
-    if (getLastAttack()?.isHit) {
-      index = _getLastAttackAdjacent()
-    } else {
-      index = _getRandomIndex()
+    // If there are unattacked adjacent indices from the last hit, use one of them.
+    if (_lastHitAdj.length) {
+      index = _lastHitAdj.pop()
     }
 
-    // this makes the computer unable to attack on an index twice
+    // Prevent multiple attacks on same index.
     while (_attacks.some((attack) => attack.index === index)) {
       index = _getRandomIndex()
     }
@@ -117,7 +110,7 @@ export const ComputerPlayer = (enemyGameboard) => {
   }
 
   /**
-   * Makes a random attack on the human player's Gameboard.
+   * Makes a attack on the human player's Gameboard.
    *
    * @throws {Error} - Throws an error if the attack is invalid.
    * @returns {string} - The attack result.
@@ -129,13 +122,76 @@ export const ComputerPlayer = (enemyGameboard) => {
       }
 
       const index = _getIndex()
-      enemyGameboard.receiveAttack(index)
 
-      const isHit = enemyGameboard
+      humanGameboard.receiveAttack(index)
+
+      const isHit = humanGameboard
         .getShipsState()
         .some((item) => item.indices.includes(index))
 
       _attacks.push({ index, isHit })
+
+      if (isHit) {
+        const adj = _getAdjacentIndices(index)
+        const pruned = adj.filter((idx) =>
+          getAttacks().every((attack) => attack.index !== idx)
+        )
+
+        // Check if there are hits in the adjacent indices.
+        if (
+          adj.some((idx) =>
+            _attacks.some((attack) => idx === attack.index && attack.isHit)
+          )
+        ) {
+          const currentHit = index
+          const lastHit = getLastHit()
+
+          // * same row
+          if (currentHit.at(0) === lastHit.at(0)) {
+            // remove all other row elements from adj
+            const otherRowAdjs = pruned.filter(
+              (idx) => idx.at(0) !== currentHit.at(0)
+            )
+            otherRowAdjs.forEach((idx) => {
+              const index = pruned.findIndex((i) => i === idx)
+              pruned.splice(index, 1)
+            })
+
+            // remove all other row elements from _lastAttackAdj
+            const otherRowIdxs = _lastHitAdj.filter(
+              (idx) => idx.at(0) !== currentHit.at(0)
+            )
+
+            otherRowIdxs.forEach((idx) => {
+              const index = _lastHitAdj.findIndex((i) => i === idx)
+              _lastHitAdj.splice(index, 1)
+            })
+          } else {
+            // * same column
+            // remove all other column elements from adj
+            const otherColAdj = pruned.filter(
+              (idx) => idx.slice(1) !== currentHit.slice(1)
+            )
+
+            otherColAdj.forEach((idx) => {
+              const index = pruned.findIndex((i) => i === idx)
+              pruned.splice(index, 1)
+            })
+
+            // remove all other column elements from _lastHitAdj
+            const otherColIdxs = _lastHitAdj.filter(
+              (idx) => idx.slice(1) !== currentHit.slice(1)
+            )
+
+            otherColIdxs.forEach((idx) => {
+              const index = _lastHitAdj.findIndex((i) => i === idx)
+              _lastHitAdj.splice(index, 1)
+            })
+          }
+        }
+
+        _lastHitAdj.push(...pruned)
+      }
 
       return `Computer attacked at ${index}`
     } catch (error) {
@@ -156,6 +212,17 @@ export const ComputerPlayer = (enemyGameboard) => {
    * @returns {Object} - The last attack of the computer.
    */
   const getLastAttack = () => _attacks.at(-1)
+
+  /**
+   * Returns the index of the second-to-last hit, or null if there is none.
+   *
+   * @returns {String | null} - The index of the last hit if there is any or null.
+   */
+  const getLastHit = () =>
+    _attacks
+      .slice()
+      .reverse()
+      .filter((attack) => attack.isHit)[1]?.index || null
 
   return {
     attack,

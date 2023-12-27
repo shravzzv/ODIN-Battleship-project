@@ -58,7 +58,7 @@ describe('ComputerPlayer', () => {
       i++
     }
 
-    expect(attackSpy).toHaveBeenCalled()
+    expect(attackSpy).toHaveBeenCalledTimes(100)
     expect(board.areAllShipsSunk()).toBe(true)
     expect(board.getMissedAttacks()).toHaveLength(95)
     expect(() => computerPlayer.attack()).toThrow()
