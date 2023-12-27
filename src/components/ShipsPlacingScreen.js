@@ -90,6 +90,13 @@ const ShipsPlacingScreen = (name) => {
   resetBtn.disabled = true
   buttons.appendChild(resetBtn)
 
+  const randomBtn = document.createElement('button')
+  randomBtn.id = 'random'
+  randomBtn.className = 'random'
+  randomBtn.textContent = 'Random'
+  randomBtn.disabled = false
+  buttons.appendChild(randomBtn)
+
   return element
 }
 

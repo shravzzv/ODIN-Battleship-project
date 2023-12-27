@@ -126,7 +126,7 @@ export const Gameboard = () => {
     const startNum = parseInt(startY)
 
     const endX = end.at(0)
-    const endY = end.at(1)
+    const endY = end.slice(1)
     const endNum = parseInt(endY)
 
     if (orientation.includes('h')) {

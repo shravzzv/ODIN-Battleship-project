@@ -4,6 +4,7 @@ import { Player } from './Player'
 import { Gameboard } from './Gameboard'
 import { ComputerPlayer } from './ComputerPlayer'
 import { Interface } from './Interface'
+import getRandomShipPlacement from './utils/randomShipPlacement'
 
 Interface.showHomeScreen()
 
@@ -20,14 +21,9 @@ const gameLoop = (friendlyBoard, playerName) => {
   const friendlyPlayer = Player(playerName, enemyBoard)
   const enemyPlayer = ComputerPlayer(friendlyBoard)
 
-  // predermined coordinates for ships on enemy waters
-  const enemyShipData = [
-    ['a2', 5, 'h'],
-    ['c4', 4, 'v'],
-    ['j7', 4, 'h'],
-    ['e7', 3, 'v'],
-    ['h1', 2, 'h'],
-  ]
+  // random coordinates for ships on enemy waters
+  const enemyShipData = getRandomShipPlacement()
+
   // place the ships on enemyboard
   enemyShipData.forEach((ship) =>
     enemyBoard.placeShip(ship[0], ship[1], ship[2])
@@ -65,7 +61,7 @@ const gameLoop = (friendlyBoard, playerName) => {
           enableShipsPlacementScreenEventListeners(playerName)
         })
       }
-    }, 300)
+    }, 500)
   }
 
   document
@@ -90,6 +86,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
   const cells = document.querySelectorAll('.cell')
   const continueBtn = document.querySelector('#continue')
   const resetBtn = document.querySelector('#reset')
+  const randomBtn = document.querySelector('#random')
   const ships = document.querySelectorAll('.shipContainer')
   const playerBoard = Gameboard()
   const shipsTracker = []
@@ -180,6 +177,7 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
           )
 
         resetBtn.disabled = false
+        randomBtn.disabled = true
       } catch (error) {
         alert(error.message)
         // if ship placement leads to an error, remove the highlight from the cell only if it is empty
@@ -201,4 +199,22 @@ const enableShipsPlacementScreenEventListeners = (playerName) => {
     Interface.showShipsPlacingScreen(playerName)
     enableShipsPlacementScreenEventListeners(playerName)
   })
+
+  randomBtn.addEventListener('click', (e) => {
+    const randomPlacements = getRandomShipPlacement()
+
+    randomPlacements.forEach((placement) => {
+      const [startIndex, length, orientation] = placement
+      playerBoard.placeShip(startIndex, length, orientation)
+      Interface.showPlacedShips(playerBoard.getShipsState())
+    })
+
+    ships.forEach((ship) => ship.removeAttribute('draggable'))
+
+    randomBtn.disabled = true
+    resetBtn.disabled = false
+    continueBtn.disabled = false
+  })
 }
+
+// don't allow player turn before enemy has made a move

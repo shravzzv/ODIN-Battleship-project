@@ -262,6 +262,11 @@ input[type='submit']:hover {
   background-color: rgba(255, 0, 34, 1);
 }
 
+.shipsPlacingScreen .random:valid {
+  color: white;
+  background-color: rgb(253, 237, 17);
+}
+
 .shipsPlacingScreen .container {
   display: flex;
   flex-wrap: wrap;
@@ -306,8 +311,19 @@ input[type='submit']:hover {
   transform: rotate(90deg);
 }
 
+/* todo: fix animation */
+/* ! problem: Animation doesn't allow ships to be rotated */
+
+/* .shipsContainer [draggable='true']:first-of-type {
+  animation: shake 300ms ease-in-out infinite;
+} */
+
 .shipsContainer [draggable='true']:active {
   background-color: rgb(43, 255, 0);
+}
+
+.shipContainer:not([draggable]) {
+  cursor: not-allowed;
 }
 
 .shipsPlacingScreen .cell.highlight {
@@ -388,5 +404,19 @@ input[type='submit']:hover {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25%,
+  75% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
   }
 }
