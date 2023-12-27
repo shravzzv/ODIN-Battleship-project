@@ -189,6 +189,7 @@ export const Gameboard = () => {
       throw new Error(
         'Invalid indices: Ship cannot be placed adjacent to other ships!'
       )
+      // ! Has problems!
     }
 
     const shipData = {

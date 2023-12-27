@@ -262,6 +262,11 @@ input[type='submit']:hover {
   background-color: rgba(255, 0, 34, 1);
 }
 
+.shipsPlacingScreen .random:valid {
+  color: white;
+  background-color: rgb(253, 237, 17);
+}
+
 .shipsPlacingScreen .container {
   display: flex;
   flex-wrap: wrap;
@@ -308,6 +313,10 @@ input[type='submit']:hover {
 
 .shipsContainer [draggable='true']:active {
   background-color: rgb(43, 255, 0);
+}
+
+.shipContainer:not([draggable]) {
+  cursor: not-allowed;
 }
 
 .shipsPlacingScreen .cell.highlight {
