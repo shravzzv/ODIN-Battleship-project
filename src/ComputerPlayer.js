@@ -16,11 +16,11 @@ export const ComputerPlayer = (humanGameboard) => {
   const _attacks = []
 
   /**
-   * Stores the adjacent indices of the last hit.
+   * Stores the unattacked adjacent indices of the last hit.
    *
    * @type {String[]}
    */
-  const lastHitAdj = []
+  const _lastHitAdj = []
 
   /**
    * Generates a random integer between a specified range, inclusive.
@@ -91,17 +91,8 @@ export const ComputerPlayer = (humanGameboard) => {
   const _getIndex = () => {
     let index = _getRandomIndex()
 
-    // todo: When a hit has been made, the next steps should be attacking all of the available surroundings
-
-    // if last attack was a hit, cycle attacking its surrounding indices
-    // if (getLastAttack()?.isHit) {
-    //   const adjIndices = _getAdjacentIndices(getLastAttack().index)
-    //   console.log(adjIndices)
-    // }
-    // ! Problem: Here, last attack's index changes after each attack.
-
-    if (lastHitAdj.length) {
-      index = lastHitAdj.pop()
+    if (_lastHitAdj.length) {
+      index = _lastHitAdj.pop()
     }
 
     // prevent multiple attacks on same index
@@ -109,6 +100,8 @@ export const ComputerPlayer = (humanGameboard) => {
       index = _getRandomIndex()
       // * why random?
     }
+
+    // todo: prevent attacking indices adjacent to ships
 
     return index
   }
@@ -134,16 +127,68 @@ export const ComputerPlayer = (humanGameboard) => {
 
       _attacks.push({ index, isHit })
 
-      // if isHit, push its unattacked adjacents to lastHitAdj
       if (isHit) {
         const adj = _getAdjacentIndices(index)
-        // remove already attacked indices
+
         const pruned = adj.filter((idx) =>
           getAttacks().every((attack) => attack.index !== idx)
         )
-        if (!lastHitAdj.length) lastHitAdj.push(...pruned)
 
-        console.log(lastHitAdj)
+        if (
+          adj.some((idx) =>
+            _attacks.some((attack) => idx === attack.index && attack.isHit)
+          )
+        ) {
+          const currentHit = index
+          const lastHit = getLastHit()
+
+          // * same row
+          if (currentHit.at(0) === lastHit.at(0)) {
+            // remove all other row elements from adj
+            const otherRowAdjs = pruned.filter(
+              (idx) => idx.at(0) !== currentHit.at(0)
+            )
+            otherRowAdjs.forEach((idx) => {
+              const index = pruned.findIndex((i) => i === idx)
+              pruned.splice(index, 1)
+            })
+
+            // remove all other row elements from _lastAttackAdj
+            const otherRowIdxs = _lastHitAdj.filter(
+              (idx) => idx.at(0) !== currentHit.at(0)
+            )
+
+            otherRowIdxs.forEach((idx) => {
+              const index = _lastHitAdj.findIndex((i) => i === idx)
+              _lastHitAdj.splice(index, 1)
+            })
+          } else {
+            // same column
+            // remove all other column elements from adj
+            const otherColAdj = pruned.filter(
+              (idx) => idx.slice(1) !== currentHit.slice(1)
+            )
+
+            otherColAdj.forEach((idx) => {
+              const index = pruned.findIndex((i) => i === idx)
+              pruned.splice(index, 1)
+            })
+
+            // remove all other column elements from _lastHitAdj
+            const otherColIdxs = _lastHitAdj.filter(
+              (idx) => idx.slice(1) !== currentHit.slice(1)
+            )
+
+            otherColIdxs.forEach((idx) => {
+              const index = _lastHitAdj.findIndex((i) => i === idx)
+              _lastHitAdj.splice(index, 1)
+            })
+          }
+        }
+
+        _lastHitAdj.push(...pruned)
+
+        console.log(_lastHitAdj)
       }
 
       return `Computer attacked at ${index}`
@@ -166,6 +211,16 @@ export const ComputerPlayer = (humanGameboard) => {
    */
   const getLastAttack = () => _attacks.at(-1)
 
+  /**
+   *
+   * @returns {String | null} - The index of the last hit if there is any or null.
+   */
+  const getLastHit = () =>
+    _attacks
+      .slice()
+      .reverse()
+      .filter((attack) => attack.isHit)[1].index || null
+
   return {
     attack,
     getAttacks,
@@ -186,10 +241,9 @@ export const ComputerPlayer = (humanGameboard) => {
  *
  */
 
-/**
- * * The computer player may be able to keep track of the attacked ships and their indices, just as a human player would.
- * Create a variable named const startingHits = []
- * or const hits = [{start: 'a4', }]
- */
+// // todo: When a hit has been made, the next steps should be attacking all of the available surroundings
+// todo: Choose specific direction of attack after a hit.
 
-// todo: When a hit has been made, the next steps should be attacking all of the available surroundings
+// todo: After two successful hits, select the direction of the next attacks, whether they should be in the same row or the same column
+
+// ? ships won't be placed adjacent to other ships, can the computer remember this

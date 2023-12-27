@@ -74,7 +74,7 @@ describe('ComputerPlayer', () => {
     ).toBe(true)
   })
 
-  test.skip(`should attack one of the ship's surroundings when it is hit`, () => {
+  test(`should attack one of the ship's surroundings when it is hit`, () => {
     board.placeShip('a1', 3, 'h')
     // ship is located at 'a1', 'a2', 'a3'
 
