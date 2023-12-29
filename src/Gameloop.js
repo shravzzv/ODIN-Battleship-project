@@ -1,9 +1,9 @@
 import 'normalize.css'
 import './main.css'
-import { Player } from './Player'
-import { Gameboard } from './Gameboard'
-import { ComputerPlayer } from './ComputerPlayer'
-import { Interface } from './Interface'
+import { Player } from './modules/Player'
+import { Gameboard } from './modules/Gameboard'
+import { ComputerPlayer } from './modules/ComputerPlayer'
+import { Interface } from './modules/Interface'
 import getRandomShipPlacement from './utils/randomShipPlacement'
 
 Interface.showHomeScreen()

@@ -1,5 +1,5 @@
-import { Player } from '../src/Player'
-import { Gameboard } from '../src/Gameboard'
+import { Player } from '../src/modules/Player'
+import { Gameboard } from '../src/modules/Gameboard'
 
 describe('Player', () => {
   let player

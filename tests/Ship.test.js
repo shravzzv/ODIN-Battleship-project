@@ -1,4 +1,4 @@
-import { Ship } from '../src/Ship'
+import { Ship } from '../src/modules/Ship'
 
 describe('Ship Factory', () => {
   let ship

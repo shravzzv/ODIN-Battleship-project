@@ -1,10 +1,10 @@
-import Header from './components/Header'
-import Main from './components/Main'
-import Footer from './components/Footer'
-import StartScreen from './components/StartScreen'
-import Arena from './components/Arena'
-import EndScreen from './components/EndScreen'
-import ShipsPlacingScreen from './components/ShipsPlacingScreen'
+import Header from '../components/Header'
+import Main from '../components/Main'
+import Footer from '../components/Footer'
+import StartScreen from '../components/StartScreen'
+import Arena from '../components/Arena'
+import EndScreen from '../components/EndScreen'
+import ShipsPlacingScreen from '../components/ShipsPlacingScreen'
 
 /**
  * Module for DOM interaction.

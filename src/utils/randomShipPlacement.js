@@ -1,4 +1,4 @@
-import { Gameboard } from '../Gameboard'
+import { Gameboard } from '../modules/Gameboard'
 
 /**
  * Returns valid random indices for ships placement on a board.
