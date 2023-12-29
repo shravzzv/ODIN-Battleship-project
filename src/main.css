@@ -175,6 +175,19 @@ input[type='submit']:hover {
   text-align: center;
 }
 
+.board.enemy.active,
+.board.friendly.active {
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+    rgba(216, 27, 43, 0.5) 0px 50px 100px -20px,
+    rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
+  background-color: rgba(202, 114, 114, 0.3);
+}
+
+.arena .board:not(.active) {
+  opacity: 0.5;
+  transition: opacity 300ms ease-in-out;
+}
+
 /* FOOTER */
 .footer {
   text-align: center;
@@ -293,6 +306,9 @@ input[type='submit']:hover {
   justify-items: center;
   align-content: center;
   gap: 0.5rem;
+
+  /* hide on mobile screens. */
+  display: none;
 }
 
 .shipContainer {
@@ -352,24 +368,16 @@ input[type='submit']:hover {
     cursor: not-allowed;
   }
 
+  /* SHIPS PLACING SCREEN */
+  .shipsContainer {
+    display: grid;
+  }
+
   /* ARENA COMPONENT */
   .arena {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-  }
-
-  .board.enemy.active,
-  .board.friendly.active {
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
-      rgba(216, 27, 43, 0.5) 0px 50px 100px -20px,
-      rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
-    background-color: rgba(202, 114, 114, 0.3);
-  }
-
-  .arena .board:not(.active) {
-    opacity: 0.5;
-    transition: opacity 300ms ease-in-out;
   }
 
   /* FOOTER COMPONENT */
@@ -383,8 +391,6 @@ input[type='submit']:hover {
     flex: 1;
     padding: var(--padding-large);
   }
-
-  /* START SCREEN */
 }
 
 /* KEYFRAMES */
