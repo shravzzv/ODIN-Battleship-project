@@ -176,8 +176,9 @@ export const Interface = (() => {
 
   /**
    * Places event listeners on the ships placement screen.
+   *
+   * @param {string} playerName
    */
-
   const enableShipsPlacementScreenEventListeners = (playerName) => {
     const cells = document.querySelectorAll('.cell')
     const continueBtn = document.querySelector('#continue')
