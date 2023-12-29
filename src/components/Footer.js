@@ -14,14 +14,17 @@ const Footer = () => {
   const question1Container = document.createElement('div')
 
   const question1 = document.createElement('h3')
-  question1.textContent = 'How to play Battleship?'
+  question1.textContent = 'Guidelines:'
   const answer1 = document.createElement('div')
   answer1.innerHTML = `
-       <p>1. Place your ships on the board.</p>
-       <p>2. Attack the enemy waters by clicking on a cell. The enemy retaliates by attacking a cell in your waters.</p>
-       <p>3. Cells marked by green means the attack was a miss and red means it was a hit!</p>
-       <p>4. The objective of the game is to be the first one to sink all of your opponents ships.</p>
+       <p><strong>1.</strong> Enter your name.</p>
+       <p><strong>2.</strong> Place your ships on the board by dragging them onto the board or by clicking random. Clicking on a ship changes its orientation. Ships cannot be placed adjacent to one another.</p>
+       <p><strong>3.</strong> There are 5 ships in total, as per the standard Battleship game. Here, the 🛳️ icon is used to represent length. There are ships with 5, 4, 4, 3 and 2 lengths in the game.</p>
+       <p><strong>4.</strong> Attack the enemy waters by clicking on a cell. The enemy retaliates by attacking a cell in your waters. Wait for your turn to strike back again.</p>
+       <p><strong>5.</strong> Cells marked by <strong style="color: green">green</strong> means the attack was a miss and <strong style="color: red">red</strong> means it was a hit!</p>
+       <p><strong>6.</strong> The enemy player is the computer. Be careful, he's smart. Destroy all his ships before he does yours!</p>
    `
+
   question1Container.appendChild(question1)
   question1Container.appendChild(answer1)
 

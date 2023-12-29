@@ -35,6 +35,7 @@
 
   /* Board component */
   --board-size: 100%;
+  --cells-gap: 2px;
 
   /* Cell component */
   --cell-size: 9vmin;
@@ -143,7 +144,7 @@ input[type='submit']:hover {
   align-items: center;
   justify-content: center;
   align-content: center;
-  gap: 2px;
+  gap: var(--cells-gap);
 }
 
 .board .cell {
@@ -172,6 +173,19 @@ input[type='submit']:hover {
 /* ARENA COMPONENT */
 .arena {
   text-align: center;
+}
+
+.board.enemy.active,
+.board.friendly.active {
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+    rgba(216, 27, 43, 0.5) 0px 50px 100px -20px,
+    rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
+  background-color: rgba(202, 114, 114, 0.3);
+}
+
+.arena .board:not(.active) {
+  opacity: 0.5;
+  transition: opacity 300ms ease-in-out;
 }
 
 /* FOOTER */
@@ -292,6 +306,9 @@ input[type='submit']:hover {
   justify-items: center;
   align-content: center;
   gap: 0.5rem;
+
+  /* hide on mobile screens. */
+  display: none;
 }
 
 .shipContainer {
@@ -310,13 +327,6 @@ input[type='submit']:hover {
 .shipContainer.vertical {
   transform: rotate(90deg);
 }
-
-/* todo: fix animation */
-/* ! problem: Animation doesn't allow ships to be rotated */
-
-/* .shipsContainer [draggable='true']:first-of-type {
-  animation: shake 300ms ease-in-out infinite;
-} */
 
 .shipsContainer [draggable='true']:active {
   background-color: rgb(43, 255, 0);
@@ -349,20 +359,6 @@ input[type='submit']:hover {
 
   /* BOARD COMPONENT */
 
-  /* .board.friendly {
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
-      rgba(46, 153, 78, 0.5) 0px 50px 100px -20px,
-      rgba(72, 165, 95, 0.3) 0px 30px 60px -30px;
-    background-color: rgba(72, 165, 95, 0.3);
-  }
-
-  .board.enemy {
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
-      rgba(156, 45, 54, 0.5) 0px 50px 100px -20px,
-      rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
-    background-color: rgba(202, 114, 114, 0.3);
-  } */
-
   .board.enemy .cell:hover {
     background-color: var(--primary-color);
     color: var(--background-color);
@@ -370,6 +366,11 @@ input[type='submit']:hover {
 
   .board.friendly .cell {
     cursor: not-allowed;
+  }
+
+  /* SHIPS PLACING SCREEN */
+  .shipsContainer {
+    display: grid;
   }
 
   /* ARENA COMPONENT */
@@ -390,8 +391,6 @@ input[type='submit']:hover {
     flex: 1;
     padding: var(--padding-large);
   }
-
-  /* START SCREEN */
 }
 
 /* KEYFRAMES */
@@ -404,19 +403,5 @@ input[type='submit']:hover {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25%,
-  75% {
-    transform: translateX(-2px);
-  }
-  50% {
-    transform: translateX(2px);
   }
 }
