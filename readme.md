@@ -1,41 +1,36 @@
 # Battleship
 
-![Project screenshot](https://)
-[Project demo](https://)
+[Project demo](https://odin-battleship-project.vercel.app/)
 
 ## Description
 
-Briefly describe your project here. What does it do? Why is it useful?
-[Project Source](https://www.theodinproject.com/lessons/node-path-javascript-battleship)
+Battleship is a web-based implementation of the classic board game. The game allows players to strategically place their ships on the board and engage in battles with an intelligent computer opponent. It provides an interactive and challenging gaming experience, staying true to the essence of the traditional Battleship game.
+
+The project is part of [The Odin Project](https://www.theodinproject.com/) curriculum. Look [here](https://www.theodinproject.com/lessons/node-path-javascript-battleship) for the project source and description.
 
 ## Features
 
-- Clearly list the key features of your project.
-- Be concise and informative.
+- **Ship Placement:** Strategically place your ships on the board, ensuring they are not adjacent to each other for a fair challenge.
+- **Responsive Design:** Enjoy a seamless gaming experience on various devices, thanks to the responsive design that adapts to different screen sizes.
+- **Intelligent Computer Opponent:** Face off against a smart computer opponent that retaliates with tactical moves, adding an extra layer of challenge to the game.
 
 ## Technologies Used
 
-- List the technologies and languages you used in your project, e.g., JavaScript, HTML, CSS, etc.
-
-<!-- Change the ?i=js,html,css to a list of your skills seprated by ','! You can find a full list of icons [here](https://github.com/tandpfun/skill-icons#icons-list). -->
-
-[![My Skills](https://skillicons.dev/icons?i=babel,bash,css,express,figma,git,github,html,js,jest,md,mongodb,netlify,nextjs,nodejs,postgres,postman,react,sass,ts,vercel,vscode,webpack)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=babel,bash,css,html,js,jest,vercel,vscode,webpack)](https://skillicons.dev)
 
 ## Installation
 
 To install the project, follow these steps:
 
 ```bash
-git clone [repository_link]
-cd project-folder
-install project
+git clone https://github.com/shravzzv/ODIN-Battleship-project
+cd ODIN-Battleship-project
+npm install
 ```
 
-Replace `[repository_link]` with the actual link to your repository.
+Open the `dist/index.html` in your browser.
 
-## Usage
-
-Explain how to use your project, provide examples if possible.
+If you want to build on top of this project, you need to run the script `npm run dev` to be able to view your changes. Check the [package.json](package.json) for more details.
 
 ## How to Contribute
 
@@ -45,7 +40,7 @@ If you'd like to contribute, follow these steps:
 2. Clone your fork locally.
 
    ```bash
-   git clone [your_forked_repository_link]
+   git clone https://github.com/shravzzv/ODIN-Battleship-project
    cd project-folder
    ```
 
@@ -69,10 +64,10 @@ If you'd like to contribute, follow these steps:
 
 Find a bug or want to request a new feature? Please let us know by submitting an issue.
 
-- [Issue Tracker](https://github.com/project/project/issues)
+- [Issue Tracker](https://github.com/shravzzv/ODIN-Battleship-project/issues)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENCE](LICENCE) file for details.
 
 ---
