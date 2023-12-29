@@ -311,13 +311,6 @@ input[type='submit']:hover {
   transform: rotate(90deg);
 }
 
-/* todo: fix animation */
-/* ! problem: Animation doesn't allow ships to be rotated */
-
-/* .shipsContainer [draggable='true']:first-of-type {
-  animation: shake 300ms ease-in-out infinite;
-} */
-
 .shipsContainer [draggable='true']:active {
   background-color: rgb(43, 255, 0);
 }
@@ -349,7 +342,7 @@ input[type='submit']:hover {
 
   /* BOARD COMPONENT */
 
-  /* .board.friendly {
+  .board.friendly {
     box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
       rgba(46, 153, 78, 0.5) 0px 50px 100px -20px,
       rgba(72, 165, 95, 0.3) 0px 30px 60px -30px;
@@ -361,7 +354,7 @@ input[type='submit']:hover {
       rgba(156, 45, 54, 0.5) 0px 50px 100px -20px,
       rgba(202, 114, 114, 0.3) 0px 30px 60px -30px;
     background-color: rgba(202, 114, 114, 0.3);
-  } */
+  }
 
   .board.enemy .cell:hover {
     background-color: var(--primary-color);
@@ -404,19 +397,5 @@ input[type='submit']:hover {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25%,
-  75% {
-    transform: translateX(-2px);
-  }
-  50% {
-    transform: translateX(2px);
   }
 }

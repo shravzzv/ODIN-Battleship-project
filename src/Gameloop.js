@@ -33,6 +33,12 @@ const gameLoop = (friendlyBoard, playerName) => {
   Interface.renderBoards(friendlyBoard, enemyBoard)
 
   /**
+   * Flag to control whether the player can make a move or needs to wait for the enemy's turn.
+   * @type {boolean}
+   */
+  let waitForEnemyTurn = false
+
+  /**
    * Handles the attack on the enemy board when a cell is clicked.
    *
    * @param {Event} e - The click event.
@@ -43,6 +49,7 @@ const gameLoop = (friendlyBoard, playerName) => {
 
     friendlyPlayer.attack(index)
     Interface.markEnemyCellAsAttacked(index)
+    waitForEnemyTurn = true
 
     setTimeout(() => {
       enemyPlayer.attack()
@@ -61,12 +68,15 @@ const gameLoop = (friendlyBoard, playerName) => {
           enableShipsPlacementScreenEventListeners(playerName)
         })
       }
-    }, 500)
+      waitForEnemyTurn = false
+    }, 1000)
   }
 
-  document
-    .querySelectorAll('.board.enemy .cell')
-    .forEach((cell) => cell.addEventListener('click', attackEnemy))
+  document.querySelectorAll('.board.enemy .cell').forEach((cell) =>
+    cell.addEventListener('click', (e) => {
+      if (!waitForEnemyTurn) attackEnemy(e)
+    })
+  )
 }
 
 // Event listener for the home screen
