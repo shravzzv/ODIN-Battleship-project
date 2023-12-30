@@ -67,9 +67,7 @@ const gameLoop = (friendlyBoard, playerName) => {
           Interface.signalPlayerTurn()
         }
       }, 2000)
-
-      // 4000ms are used because 2 successive timeouts of the same length happen instatneosly.
-    }, 4000)
+    }, 3000)
   }
 
   document.querySelectorAll('.board.enemy .cell').forEach((cell) =>
