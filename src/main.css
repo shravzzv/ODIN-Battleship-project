@@ -39,6 +39,7 @@
 
   /* Cell component */
   --cell-size: 9vmin;
+  --cell-border: 1px solid black;
   --cell-border-radius: 3px;
 
   /* Ships placement component */
@@ -150,7 +151,7 @@ input[type='submit']:hover {
 .board .cell {
   color: var(--primary-color);
   background-color: var(--background-color);
-  border: 1px solid #000;
+  border: var(--cell-border);
   width: var(--cell-size);
   height: var(--cell-size);
   cursor: pointer;
@@ -163,11 +164,13 @@ input[type='submit']:hover {
 .cell.attacked {
   box-shadow: rgb(43, 255, 0) 0px 30px 60px -12px inset,
     rgb(94, 255, 0) 0px 18px 36px -18px inset;
+  animation: attackMiss 1000ms ease-in-out;
 }
 
 .cell.ship.attacked {
   box-shadow: rgba(255, 0, 34, 1) 0px 30px 60px -12px inset,
     rgba(253, 0, 0, 1) 0px 18px 36px -18px inset;
+  animation: attackHit 1000ms ease-in-out;
 }
 
 /* ARENA COMPONENT */
@@ -403,5 +406,42 @@ input[type='submit']:hover {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes attackMiss {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  25% {
+  }
+  50% {
+    scale: 2;
+    border: none;
+  }
+  75% {
+  }
+  100% {
+    scale: 1;
+    transform: rotateX(360deg) rotateY(0deg) rotateZ(0deg);
+    border: var(--cell-border);
+  }
+}
+
+@keyframes attackHit {
+  0% {
+    scale: 2;
+  }
+  25% {
+  }
+  50% {
+    scale: 0.5;
+    border: none;
+  }
+  75% {
+  }
+  100% {
+    scale: 1;
+    border: var(--cell-border);
   }
 }

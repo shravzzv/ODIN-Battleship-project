@@ -94,16 +94,18 @@ export const ComputerPlayer = (humanGameboard) => {
    * @private
    */
   const _getIndex = () => {
-    let index = _getRandomIndex()
+    let index
 
     // If there are unattacked adjacent indices from the last hit, use one of them.
     if (_lastHitAdj.length) {
       index = _lastHitAdj.pop()
-    }
-
-    // Prevent multiple attacks on same index.
-    while (_attacks.some((attack) => attack.index === index)) {
-      index = _getRandomIndex()
+    } else {
+      do {
+        index = _getRandomIndex()
+      } while (
+        // prevent multiple attacks on same index
+        _attacks.some((attack) => attack.index === index)
+      )
     }
 
     return index
@@ -230,3 +232,5 @@ export const ComputerPlayer = (humanGameboard) => {
     getLastAttack,
   }
 }
+
+// if _lastHitAdj is empty, prevent attacking on cells which contain a hit cell as its adjacent
