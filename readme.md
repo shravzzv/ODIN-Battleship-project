@@ -11,8 +11,8 @@ The project is part of [The Odin Project](https://www.theodinproject.com/) curri
 ## Features
 
 - **Ship Placement:** Strategically place your ships on the board, ensuring they are not adjacent to each other for a fair challenge.
-- **Responsive Design:** Enjoy a seamless gaming experience on various devices, thanks to the responsive design that adapts to different screen sizes.
 - **Intelligent Computer Opponent:** Face off against a smart computer opponent that retaliates with tactical moves, adding an extra layer of challenge to the game.
+- **Immersive Experience:** Enjoy sounds and animations that bring the game to life, adding a lively touch to your Battleship experience.
 
 ## Technologies Used
 
