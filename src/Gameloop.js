@@ -47,22 +47,29 @@ const gameLoop = (friendlyBoard, playerName) => {
     friendlyPlayer.attack(index)
     Interface.markEnemyCellAsAttacked(index)
     waitForEnemyTurn = true
+
+    // Delay before signaling the enemy's turn
     setTimeout(() => {
       Interface.signalEnemyTurn()
-    }, 300)
+    }, 2000)
 
+    // Delay before enemy player's attack
     setTimeout(() => {
       enemyPlayer.attack()
       Interface.markFriendlyCellAsAttacked(enemyPlayer.getLastAttack().index)
       waitForEnemyTurn = false
 
       setTimeout(() => {
-        // Game finished
         if (friendlyBoard.areAllShipsSunk() || enemyBoard.areAllShipsSunk()) {
+          // Game finished
           Interface.showEndScreen(enemyBoard.areAllShipsSunk(), playerName)
-        } else Interface.signalPlayerTurn()
-      }, 300)
-    }, 1500)
+        } else {
+          Interface.signalPlayerTurn()
+        }
+      }, 2000)
+
+      // 4000ms are used because 2 successive timeouts of the same length happen instatneosly.
+    }, 4000)
   }
 
   document.querySelectorAll('.board.enemy .cell').forEach((cell) =>
