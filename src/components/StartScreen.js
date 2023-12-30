@@ -1,3 +1,8 @@
+/**
+ * Represents the start screen for the Battleship game.
+ * @returns {HTMLElement} The HTML element representing the start screen.
+ */
+
 const StartScreen = () => {
   const element = document.createElement('div')
   element.className = 'startScreen'
