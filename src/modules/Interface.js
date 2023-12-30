@@ -136,7 +136,9 @@ export const Interface = (() => {
       `.board.enemy .cell[data-index=${index}]`
     )
     cell.classList.add('attacked')
-    cell.classList.contains('ship') ? shipHit.play() : shipMiss.play()
+    cell.classList.contains('ship')
+      ? (shipHit.play(), (cell.textContent = '🛳️'))
+      : shipMiss.play()
   }
 
   /**
