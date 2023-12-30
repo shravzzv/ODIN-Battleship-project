@@ -9,6 +9,17 @@ import gameLoop from '../Gameloop'
 import { Gameboard } from './Gameboard'
 import getRandomShipPlacement from '../utils/randomShipPlacement'
 
+import startGameBtnClickSound from '../sounds/clicks/click_effect-86995.mp3'
+import shipDropSound from '../sounds/clicks/click-button-app-147358.mp3'
+import btnClickSound from '../sounds/clicks/mech-keyboard-02-102918.mp3'
+import shipClickSound from '../sounds/clicks/ui-click-43196.mp3'
+import underwaterAmbienceSound from '../sounds/underwater.mp3'
+import runningWaterSound from '../sounds/runningWater.mp3'
+import shotGunFiringSound from '../sounds/shot.mp3'
+import splashSound from '../sounds/splash.mp3'
+import loseMusic from '../sounds/lose.mp3'
+import winMusic from '../sounds/win.mp3'
+
 /**
  * Module for DOM interaction.
  *
@@ -22,6 +33,22 @@ export const Interface = (() => {
    */
   const _root = document.querySelector('#root')
   const _SHIP_SYMBOL = '🛳️'
+
+  /**
+   * Audio objects
+   */
+  const underwaterSound = new Audio(underwaterAmbienceSound)
+  const startClick = new Audio(startGameBtnClickSound)
+  const waterSound = new Audio(runningWaterSound)
+  const shipHit = new Audio(shotGunFiringSound)
+  const shipClick = new Audio(shipClickSound)
+  const dropSound = new Audio(shipDropSound)
+  const btnClick = new Audio(btnClickSound)
+  const shipMiss = new Audio(splashSound)
+  const lose = new Audio(loseMusic)
+  const win = new Audio(winMusic)
+  underwaterSound.loop = true
+  waterSound.loop = true
 
   /**
    * Displays the home screen of the game.
@@ -41,7 +68,13 @@ export const Interface = (() => {
       e.preventDefault()
       const playerName = e.target.elements.playerName.value.trim()
       if (!playerName) return
-      showShipsPlacingScreen(playerName)
+
+      startClick.play()
+
+      setTimeout(() => {
+        showShipsPlacingScreen(playerName)
+        waterSound.play()
+      }, 300)
     })
   }
 
@@ -103,6 +136,7 @@ export const Interface = (() => {
       `.board.enemy .cell[data-index=${index}]`
     )
     cell.classList.add('attacked')
+    cell.classList.contains('ship') ? shipHit.play() : shipMiss.play()
   }
 
   /**
@@ -115,6 +149,7 @@ export const Interface = (() => {
       `.board.friendly .cell[data-index=${index}]`
     )
     cell.classList.add('attacked')
+    cell.classList.contains('ship') ? shipHit.play() : shipMiss.play()
   }
 
   /**
@@ -127,9 +162,13 @@ export const Interface = (() => {
     const mainEl = document.querySelector('.main')
     mainEl.innerHTML = ``
     mainEl.appendChild(EndScreen(isWon, name))
-    document
-      .querySelector('#restart')
-      .addEventListener('click', () => showShipsPlacingScreen(name))
+    underwaterSound.pause()
+    isWon ? win.play() : lose.play()
+    document.querySelector('#restart').addEventListener('click', () => {
+      btnClick.play()
+      waterSound.play()
+      showShipsPlacingScreen(name)
+    })
   }
 
   /**
@@ -191,12 +230,15 @@ export const Interface = (() => {
     // change ship orientation on click
     ships.forEach((ship) =>
       ship.addEventListener('click', (e) => {
+        shipClick.play()
         const orientation = e.target.getAttribute('data-orientation')
         e.target.setAttribute(
           'data-orientation',
           orientation === 'h' ? 'v' : 'h'
         )
-        e.target.classList.toggle('vertical')
+        setTimeout(() => {
+          e.target.classList.toggle('vertical')
+        }, 300)
       })
     )
 
@@ -282,6 +324,7 @@ export const Interface = (() => {
 
           resetBtn.disabled = false
           randomBtn.disabled = true
+          dropSound.play()
         } catch (error) {
           alert(error.message)
           // if ship placement leads to an error, remove the highlight from the cell only if it is empty
@@ -297,15 +340,22 @@ export const Interface = (() => {
       })
     )
 
-    continueBtn.addEventListener('click', () =>
-      gameLoop(playerBoard, playerName)
-    )
+    continueBtn.addEventListener('click', () => {
+      btnClick.play()
+      waterSound.pause()
+      setTimeout(() => {
+        gameLoop(playerBoard, playerName)
+        underwaterSound.play()
+      }, 300)
+    })
 
     resetBtn.addEventListener('click', () => {
+      btnClick.play()
       showShipsPlacingScreen(playerName)
     })
 
     randomBtn.addEventListener('click', (e) => {
+      btnClick.play()
       const randomPlacements = getRandomShipPlacement()
 
       randomPlacements.forEach((placement) => {
